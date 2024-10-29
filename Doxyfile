@@ -1,0 +1,29 @@
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "Matrix HPP"
+PROJECT_BRIEF          = "Matrix HPP library"
+OUTPUT_DIRECTORY       = docs
+
+USE_MDFILE_AS_MAINPAGE = README.md
+
+SHOW_USED_FILES        = YES
+SHOW_FILES             = YES
+
+ALPHABETICAL_INDEX     = NO
+MAKEINDEX_CMD_NAME     = echo
+
+USE_MATHJAX            = YES
+
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+EXCLUDE                = tests.cpp
+EXCLUDE_SYMBOLS        = Mtx::is_complex main example_*
+
+GENERATE_HTML          = NO
+GENERATE_LATEX         = YES
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_XML           = NO
+GENERATE_DOCBOOK       = NO
+
+ENABLE_PREPROCESSING   = NO
