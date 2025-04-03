@@ -1562,17 +1562,24 @@ Matrix<T> inv(const Matrix<T>& A) {
   }
 }
 
-/** \brief Moore-Penrose pseudo inverse.
+/** \brief Moore-Penrose pseudoinverse.
  *  
- *  Calculates the Moore-Penrose pseudo inverse \f$A^+\f$ of a matrix \f$A\f$. <br>
- *  \f$A^+ = (A' A)^{-1} A'\f$ <br>
+ *  Calculates the Moore-Penrose pseudoinverse \f$A^+\f$ of a matrix \f$A\f$. <br>
+ *  If \f$A\f$ has linearly independent columns, the pseudoinverse is a left inverse, that is \f$A^+ A = I\f$, and \f$A^+ = (A' A)^{-1} A'\f$.
+ *  If \f$A\f$ has linearly independent rows, the pseudoinverse is a right inverse, that is \f$A A^+ = I\f$, and \f$A^+ = A' (A A')^{-1}\f$.
  *  More information: https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse
  */
 template<typename T>
 Matrix<T> pinv(const Matrix<T>& A) {
-  auto AH_A = mult<T,true,false>(A, A);
-  auto Linv = inv_posdef(AH_A);
-  return mult<T,false,true>(Linv, A);
+  if (A.rows() > A.cols()) {
+    auto AH_A = mult<T,true,false>(A, A);
+    auto Linv = inv_posdef(AH_A);
+    return mult<T,false,true>(Linv, A);
+  } else {
+    auto AA_H = mult<T,false,true>(A, A);
+    auto Linv = inv_posdef(AA_H);
+    return mult<T,true,false>(A, Linv);
+  }
 }
 
 /** \brief Matrix trace.

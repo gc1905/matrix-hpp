@@ -420,6 +420,9 @@ class TC_MatrixInversion: public Testcase_Abstract {
     test_square<double>();
     test_square<complex<double>>();
 
+    test_pinv<double>();
+    test_pinv<complex<double>>();
+
     test_singular<double>();
     test_singular<complex<double>>();
   }
@@ -459,6 +462,17 @@ class TC_MatrixInversion: public Testcase_Abstract {
 
     auto A = triu(rng.gen_matrix<T>(4,4));
     assertEqualTol(A * inv_triu(A), eye<T>(4), static_cast<T>(1e-12), string("Triangular upper inverse ") + type_str<T>());
+  }
+
+  template<typename T>
+  void test_pinv(unsigned seed = 1) {
+    Matrix_rng rng(seed);
+    
+    auto A = triu(rng.gen_matrix<T>(4,3));
+    assertEqualTol(pinv(A) * A, eye<T>(3), static_cast<T>(1e-12), string("Pinv left ") + type_str<T>());
+
+    auto B = A.transpose();
+    assertEqualTol(B * pinv(B), eye<T>(3), static_cast<T>(1e-12), string("Pinv right ") + type_str<T>());
   }
 
   template<typename T>
