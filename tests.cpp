@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cmath>
 #include <random>
+#include <algorithm>
 
 #include "matrix.hpp"
 
@@ -73,6 +74,13 @@ template<> inline const string type_str<float>() { return "float"; }
 template<> inline const string type_str<complex<double>>() { return "complex double"; }
 template<> inline const string type_str<complex<float>>() { return "complex float"; }
 
+template<typename T>
+ostream& operator<<(ostream& os, const vector<T>& v) {
+  for (unsigned i = 0; i < v.size(); i ++)
+    os << v[i] << " ";
+  return os;
+}
+
 /*
  * Abstract testcase class definition. 
  */
@@ -118,6 +126,17 @@ class Testcase_Abstract {
     template<typename T>
     void assertEqualTol(const Matrix<T>& result, const Matrix<T>& expected, T tol, const string& what) {
       if (!result.isequal(expected, tol)) {
+        num_errors ++;
+
+        error_log << "Assertion failed for '" << what << "'" << endl;
+        error_log << "Result = [" << result << "]" << endl;
+        error_log << "Expected = [" << expected << "]" << endl;
+      }
+    }
+
+    template<typename T>
+    void assertEqual(const vector<T>& result, const vector<T>& expected, const string& what) {
+      if ((! equal(result.begin(), result.end(), expected.begin())) || (result.size() != expected.size())) {
         num_errors ++;
 
         error_log << "Assertion failed for '" << what << "'" << endl;
@@ -177,8 +196,14 @@ class TC_Arithmetic: public Testcase_Abstract {
   void test_real() {
     using T = double;
 
-    auto A2x3 = Matrix<T>({8, 4, 5, 2, 2, 3}, 2, 3);
-    auto A3x2 = Matrix<T>({5, 1, 1, 7, 8, 2}, 3, 2);
+    auto A2x3 = Matrix<T>({8, 4, 5, 
+                           2, 2, 3}, 2, 3);
+
+    auto A3x2 = Matrix<T>({5, 1, 
+                           1, 7, 
+                           8, 2}, 3, 2);
+
+    vector<T> v2 {3,5};
 
     assertEqual(add<T,false,false>(A2x3,A2x3), Matrix<T>({16, 8, 10, 4, 4, 6}, 2, 3), string("Addition ") + type_str<T>());
     assertEqual(add<T,true ,false>(A3x2,A2x3), Matrix<T>({13, 5, 13, 3, 9, 5}, 2, 3), string("Addition T1 ") + type_str<T>());
@@ -199,6 +224,9 @@ class TC_Arithmetic: public Testcase_Abstract {
     assertEqual(mult<T,true ,false>(A2x3,A2x3), Matrix<T>({68, 36, 46, 36, 20, 26, 46, 26, 34}, 3, 3), string("Multiplication T1 ") + type_str<T>());
     assertEqual(mult<T,false,true >(A2x3,A2x3), Matrix<T>({105, 39, 39, 17}, 2, 2), string("Multiplication T2 ") + type_str<T>());
     assertEqual(mult<T,true ,true >(A3x2,A2x3), Matrix<T>({84, 36, 46, 22}, 2, 2), string("Multiplication T12 ") + type_str<T>());
+
+    assertEqual(mult(v2,A2x3), vector<T> {34,22,30}, string("Multiplication vec-M ") + type_str<T>());
+    assertEqual(mult(A3x2,v2), vector<T> {20,38,34}, string("Multiplication M-vec ") + type_str<T>());
   }
 
   void test_complex() {
@@ -468,7 +496,7 @@ class TC_MatrixInversion: public Testcase_Abstract {
   void test_pinv(unsigned seed = 1) {
     Matrix_rng rng(seed);
     
-    auto A = triu(rng.gen_matrix<T>(4,3));
+    auto A = rng.gen_matrix<T>(4,3);
     assertEqualTol(pinv(A) * A, eye<T>(3), static_cast<T>(1e-12), string("Pinv left ") + type_str<T>());
 
     auto B = A.transpose();
