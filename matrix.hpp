@@ -926,11 +926,20 @@ inline Matrix<T> operator*(const Matrix<T>& A, const Matrix<T>& B) {
 
 /** \brief Matrix and std::vector product.
  *  
- *  Calculates product between a matrix and a std::vector \f$A \cdot v\f$.
+ *  Calculates product between matrix and std::vector \f$A \cdot v\f$. The input vector is assumed to be a column vector.
  */
 template<typename T>
 inline std::vector<T> operator*(const Matrix<T>& A, const std::vector<T>& v) {
   return mult(A,v);
+}
+
+/** \brief std::vector and matrix product.
+ *  
+ *  Calculates product between std::vector and matrix \f$v \cdot A\f$. The input vector is assumed to be a row vector.
+ */
+template<typename T>
+inline std::vector<T> operator*(const std::vector<T>& v, const Matrix<T>& A) {
+  return mult(v,A);
 }
 
 /** \brief Matrix sum with scalar.
