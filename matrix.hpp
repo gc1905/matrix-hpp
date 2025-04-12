@@ -813,7 +813,7 @@ template<typename T>
 std::vector<T> mult(const std::vector<T>& v, const Matrix<T>& A) {
   if (A.rows() != v.size()) throw std::runtime_error("Unmatching matrix dimensions for mult");
 
-  std::vector<T> u(A.rows(), static_cast<T>(0));
+  std::vector<T> u(A.cols(), static_cast<T>(0));
   for (unsigned c = 0; c < A.cols(); c++)
     for (unsigned r = 0; r < A.rows(); r++)
       u[c] += v[r] * A(r,c);
