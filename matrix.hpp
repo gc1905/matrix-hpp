@@ -2477,6 +2477,7 @@ class Matrix {
     /** \brief Row addition.
      *  
      *  Adds values of elements in row \a from to the elements of row \a to.
+     *  The elements in row \a from are unchanged.
      *
      *  \throws std::out_of_range when row index is out of range
      */
@@ -2485,10 +2486,29 @@ class Matrix {
     /** \brief Column addition.
      *  
      *  Adds values of elements in column \a from to the elements of column \a to.
+     *  The elements in column \a from are unchanged.
      *
      *  \throws std::out_of_range when column index is out of range
      */
     void add_col_to_another(unsigned to, unsigned from);
+
+    /** \brief Row multiplication.
+     *  
+     *  Multiply values of each element in row \a to by the elements of row \a from.
+     *  The elements in row \a from are unchanged.
+     *
+     *  \throws std::out_of_range when row index is out of range
+     */
+    void mult_row_by_another(unsigned to, unsigned from);
+
+    /** \brief Column multiplication.
+     *  
+     *  Multiply values of each element in column \a to by the elements of column \a from.
+     *  The elements in column \a from are unchanged.
+     *
+     *  \throws std::out_of_range when column index is out of range
+     */
+    void mult_col_by_another(unsigned to, unsigned from);
 
     /** \brief Row swap.
      *  
@@ -2906,6 +2926,22 @@ void Matrix<T>::add_col_to_another(unsigned to, unsigned from) {
 
   for (unsigned k = 0; k < rows(); k++)
     at(k, to) += at(k, from);
+}
+
+template<typename T>
+void Matrix<T>::mult_row_by_another(unsigned to, unsigned from) {
+  if (!(to < rows() && from < rows())) throw std::out_of_range("Row index out of range");
+
+  for (unsigned k = 0; k < cols(); k++)
+    at(to, k) *= at(from, k);
+}
+
+template<typename T>
+void Matrix<T>::mult_col_by_another(unsigned to, unsigned from) {
+  if (!(to < cols() && from < cols())) throw std::out_of_range("Column index out of range");
+
+  for (unsigned k = 0; k < rows(); k++)
+    at(k, to) *= at(k, from);
 }
 
 template<typename T>
