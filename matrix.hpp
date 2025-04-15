@@ -2730,7 +2730,7 @@ inline T & Matrix<T>::at(unsigned nel) {
 
 template<typename T>
 inline T & Matrix<T>::at(unsigned row, unsigned col) {
-  if (!(row < rows() && col < cols())) std::cout << "at() failed at " << row << "," << col << std::endl;
+  if (!(row < rows() && col < cols())) throw std::out_of_range("Element index out of range");
 
   return data[nrows * col + row];
 }
