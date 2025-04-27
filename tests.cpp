@@ -225,8 +225,10 @@ class TC_Arithmetic: public Testcase_Abstract {
     assertEqual(mult<T,false,true >(A2x3,A2x3), Matrix<T>({105, 39, 39, 17}, 2, 2), string("Multiplication T2 ") + type_str<T>());
     assertEqual(mult<T,true ,true >(A3x2,A2x3), Matrix<T>({84, 36, 46, 22}, 2, 2), string("Multiplication T12 ") + type_str<T>());
 
-    assertEqual(mult(v2,A2x3), vector<T> {34,22,30}, string("Multiplication vec-M ") + type_str<T>());
-    assertEqual(mult(A3x2,v2), vector<T> {20,38,34}, string("Multiplication M-vec ") + type_str<T>());
+    assertEqual(mult<T,false>(v2,A2x3), vector<T> {34,22,30}, string("Multiplication vec-M ") + type_str<T>());
+    assertEqual(mult<T,true >(v2,A3x2), vector<T> {20,38,34}, string("Multiplication vec-M^T ") + type_str<T>());
+    assertEqual(mult<T,false>(A3x2,v2), vector<T> {20,38,34}, string("Multiplication M-vec ") + type_str<T>());
+    assertEqual(mult<T,true >(A2x3,v2), vector<T> {34,22,30}, string("Multiplication M^T-vec ") + type_str<T>());
   }
 
   void test_complex() {

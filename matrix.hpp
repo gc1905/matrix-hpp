@@ -786,18 +786,28 @@ Matrix<T> subtract(const Matrix<T>& A, const Matrix<T>& B) {
  *  
  *  Performs the right multiplication of a matrix with a column vector represented by std::vector. The result of the operation is also a std::vector.
  *  
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
+ *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ * 
+ *  \tparam transpose_matrix if set to true, the matrix will be transposed during operation
+ * 
  *  \param A input matrix of size \a N x \a M
  *  \param v std::vector of size \a M
  *  \return std::vector of size \a N being the result of multiplication
  */
-template<typename T>
+template<typename T, bool transpose_matrix = false>
 std::vector<T> mult(const Matrix<T>& A, const std::vector<T>& v) {
-  if (A.cols() != v.size()) throw std::runtime_error("Unmatching matrix dimensions for mult");
+  // Adjust dimensions based on transpositions
+  unsigned rows_A = transpose_matrix ? A.cols() : A.rows();
+  unsigned cols_A = transpose_matrix ? A.rows() : A.cols();
 
-  std::vector<T> u(A.rows(), static_cast<T>(0));
-  for (unsigned r = 0; r < A.rows(); r++)
-    for (unsigned c = 0; c < A.cols(); c++)
-      u[r] += v[c] * A(r,c);
+  if (cols_A != v.size()) throw std::runtime_error("Unmatching matrix dimensions for mult");
+
+  std::vector<T> u(rows_A, static_cast<T>(0));
+  for (unsigned r = 0; r < rows_A; r++)
+    for (unsigned c = 0; c < cols_A; c++)
+      u[r] += v[c] * (transpose_matrix ? cconj(A(c,r)) : A(r,c));
+
   return u;
 }
 
@@ -805,18 +815,28 @@ std::vector<T> mult(const Matrix<T>& A, const std::vector<T>& v) {
  *  
  *  Performs the left multiplication of a std::vector with a matrix. The result of the operation is also a std::vector.
  *  
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
+ *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ * 
+ *  \tparam transpose_matrix if set to true, the matrix will be transposed during operation
+ * 
  *  \param v std::vector of size \a N
  *  \param A input matrix of size \a N x \a M
  *  \return std::vector of size \a M being the result of multiplication
  */
-template<typename T>
+template<typename T, bool transpose_matrix = false>
 std::vector<T> mult(const std::vector<T>& v, const Matrix<T>& A) {
-  if (A.rows() != v.size()) throw std::runtime_error("Unmatching matrix dimensions for mult");
+  // Adjust dimensions based on transpositions
+  unsigned rows_A = transpose_matrix ? A.cols() : A.rows();
+  unsigned cols_A = transpose_matrix ? A.rows() : A.cols();
 
-  std::vector<T> u(A.cols(), static_cast<T>(0));
-  for (unsigned c = 0; c < A.cols(); c++)
-    for (unsigned r = 0; r < A.rows(); r++)
-      u[c] += v[r] * A(r,c);
+  if (rows_A != v.size()) throw std::runtime_error("Unmatching matrix dimensions for mult");
+
+  std::vector<T> u(cols_A, static_cast<T>(0));
+  for (unsigned c = 0; c < cols_A; c++)
+    for (unsigned r = 0; r < rows_A; r++)
+      u[c] += v[r] * (transpose_matrix ? cconj(A(c,r)) : A(r,c));
+  
   return u;
 }
 
