@@ -457,6 +457,52 @@ Matrix<T> repmat(const Matrix<T>& A, unsigned m, unsigned n) {
   return B;
 }
 
+/** \brief Horizontal matrix concatenation.
+ *  
+ *  Concatenates two input matrices \a A and \a B horizontally to form a concatenated matrix \f$C = [A|B]\f$.
+ * 
+ *  \throws std::runtime_error when the number of rows in \a A and \a B is not equal.
+ */
+template<typename T>
+Matrix<T> concatenate_horizontal(const Matrix<T>& A, const Matrix<T>& B) {
+  if (A.rows() != B.rows()) throw std::runtime_error("Unmatching number of rows for horizontal concatenation");
+  
+  Matrix<T> C(A.rows(), A.cols() + B.cols());
+
+  for (unsigned c = 0; c < A.cols(); c++)
+    for (unsigned r = 0; r < A.rows(); r++)
+      C(r,c) = A(r,c);
+
+  for (unsigned c = 0; c < B.cols(); c++)
+    for (unsigned r = 0; r < B.rows(); r++)
+      C(r,c+A.cols()) = B(r,c);
+
+  return C;
+}
+
+/** \brief Vertical matrix concatenation.
+ *  
+ *  Concatenates two input matrices \a A and \a B vertically to form a concatenated matrix \f$C = [A|B]^T\f$.
+ * 
+ *  \throws std::runtime_error when the number of columns in \a A and \a B is not equal.
+ */
+template<typename T>
+Matrix<T> concatenate_vertical(const Matrix<T>& A, const Matrix<T>& B) {
+  if (A.cols() != B.cols()) throw std::runtime_error("Unmatching number of columns for vertical concatenation");
+  
+  Matrix<T> C(A.rows() + B.rows(), A.cols());
+
+  for (unsigned c = 0; c < A.cols(); c++)
+    for (unsigned r = 0; r < A.rows(); r++)
+      C(r,c) = A(r,c);
+
+  for (unsigned c = 0; c < B.cols(); c++)
+    for (unsigned r = 0; r < B.rows(); r++)
+      C(r+A.rows(),c) = B(r,c);
+
+  return C;
+}
+
 /** \brief Frobenius norm.
  *  
  *  Calculates Frobenius norm of real matrix. <br>

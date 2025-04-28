@@ -363,6 +363,37 @@ class TC_Permutations: public Testcase_Abstract {
   }
 };
 
+class TC_Concatenation: public Testcase_Abstract {
+  protected:
+    virtual const char* name() {
+      return "Matrix Concatenation";
+    }
+
+  virtual void test() {
+    Matrix<int> A({1, 2, 3,
+                   4, 5, 6}, 2, 3);
+    Matrix<int> B({7, 8,
+                   9,10}, 2, 2);
+    Matrix<int> C({1, 2, 3, 7, 8,
+                   4, 5, 6, 9,10}, 2, 5);
+    
+    assertEqual(concatenate_horizontal(A,B), C, "Horizontal concatenation");
+
+    Matrix<int> D({ 1, 2, 3,
+                    4, 5, 6}, 2, 3);
+    Matrix<int> E({ 7, 8, 9,
+                   10,11,12,
+                   13,14,15}, 3, 3);
+    Matrix<int> F({ 1, 2, 3,
+                    4, 5, 6,
+                    7, 8, 9,
+                   10,11,12,
+                   13,14,15}, 5, 3);
+
+    assertEqual(concatenate_vertical(D,E), F, "Vertical concatenation");
+  }
+};
+
 class TC_CholeskyDecomposition: public Testcase_Abstract {
   protected:
     virtual const char* name() {
@@ -811,6 +842,7 @@ int main() {
   TC_Elementwise().run();
   TC_Determinant().run();
   TC_Permutations().run();
+  TC_Concatenation().run();
   TC_CholeskyDecomposition().run();
   TC_LdlDecomposition().run();
   TC_MatrixInversion().run();
