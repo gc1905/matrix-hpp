@@ -1689,10 +1689,12 @@ double cond(const Matrix<T>& A) {
 
 /** \brief Cholesky decomposition.
  *
- *  The Cholesky decomposition of a Hermitian positive-definite matrix A, is a decomposition of the form: <br>
+ *  The Cholesky decomposition of a Hermitian positive-definite matrix \f$A\f$ is a decomposition of the form: <br>
  *  \f$ A = LL^H \f$ <br>
- *  where \f$L\f$ is a lower triangular matrix with real and positive diagonal entries, and \f$L^H\f$ denotes the conjugate transpose of \f$L\f$. <br>
- *  Input matrix must be square. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. <br>
+ *  where \f$L\f$ is a lower triangular matrix with real and positive diagonal entries, and \f$^H\f$ denotes the conjugate transpose. <br>
+ *  Input matrix must be square and Hermitian. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. 
+ *  Only the lower-triangular and diagonal elements of the input matrix are used for calculations. No checking is performed to verify if the input 
+ *  matrix is Hermitian. <br>
  *  More information: https://en.wikipedia.org/wiki/Cholesky_decomposition
  * 
  *  \throws std::runtime_error when the input matrix is not square
