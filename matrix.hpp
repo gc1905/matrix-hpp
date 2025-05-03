@@ -1689,38 +1689,51 @@ double cond(const Matrix<T>& A) {
 
 /** \brief Cholesky decomposition.
  *
- *  The Cholesky decomposition of a Hermitian positive-definite matrix \f$A\f$ is a decomposition of the form: <br>
- *  \f$ A = LL^H \f$ <br>
+ *  The Cholesky decomposition of a Hermitian positive-definite matrix \f$A\f$ is a decomposition of the form \f$ A = LL^H \f$,
  *  where \f$L\f$ is a lower triangular matrix with real and positive diagonal entries, and \f$^H\f$ denotes the conjugate transpose. <br>
+ *  Alternatively, the decomposition can be computed as \f$ A = U^H U \f$ with \f$U\f$ being upper-triangular matrix. Selection between lower and 
+ *  upper triangular factor can be done via template parameter. <br>
  *  Input matrix must be square and Hermitian. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. 
- *  Only the lower-triangular and diagonal elements of the input matrix are used for calculations. No checking is performed to verify if the input 
- *  matrix is Hermitian. <br>
+ *  Only the lower-triangular or upper-triangular and diagonal elements of the input matrix are used for calculations. No checking is performed 
+ *  to verify if the input matrix is Hermitian. <br>
  *  More information: https://en.wikipedia.org/wiki/Cholesky_decomposition
+ * 
+ *  \tparam is_upper if set to true, the result is provided for upper-triangular factor \f$U\f$. If set to false, the result 
+ *  is provided for lower-triangular factor \f$L\f$ .
  * 
  *  \throws std::runtime_error when the input matrix is not square
  *  \throws singular_matrix_exception when the input matrix is singular (detected as division by 0 during computation)
  */
-template<typename T>
+template<typename T, bool is_upper = false>
 Matrix<T> chol(const Matrix<T>& A) {
   if (! A.issquare()) throw std::runtime_error("Input matrix is not square");
 
-  const unsigned N = A.rows();
-  Matrix<T> L = tril(A);
+  const unsigned N = A.rows(); 
+
+  // Calculate lower or upper triangular, depending on template parameter.
+  // Calculation is the same - the difference is in transposed row and column indexing.
+  Matrix<T> C = is_upper ? triu(A) : tril(A);
 
   for (unsigned j = 0; j < N; j++) {
-    if (L(j,j) == 0.0) throw singular_matrix_exception("Singular matrix in chol");
+    if (C(j,j) == 0.0) throw singular_matrix_exception("Singular matrix in chol");
 
-    L(j,j) = std::sqrt(L(j,j));
+    C(j,j) = std::sqrt(C(j,j));
 
     for (unsigned k = j+1; k < N; k++)
-      L(k,j) = L(k,j) / L(j,j);
+      if (is_upper)
+        C(j,k) /= C(j,j);
+      else
+        C(k,j) /= C(j,j);
 
     for (unsigned k = j+1; k < N; k++)
       for (unsigned i = k; i < N; i++)
-        L(i,k) = L(i,k) - L(i,j) * cconj(L(k,j));
+        if (is_upper)
+          C(k,i) -= C(j,i) * cconj(C(j,k));
+        else
+          C(i,k) -= C(i,j) * cconj(C(k,j));
   }
 
-  return L;
+  return C;
 }
 
 /** \brief Inverse of Cholesky decomposition.

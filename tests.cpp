@@ -409,7 +409,8 @@ class TC_CholeskyDecomposition: public Testcase_Abstract {
 
   template<typename T>
   void test_singular() {
-    test_singular_exception<T>(chol<T>, "Cholesky");
+    test_singular_exception<T>(chol<T,false>, "Cholesky lower");
+    test_singular_exception<T>(chol<T,true >, "Cholesky upper");
   }
 
   template<typename T>
@@ -417,11 +418,14 @@ class TC_CholeskyDecomposition: public Testcase_Abstract {
     Matrix_rng rng(seed);
 
     auto A = rng.gen_psd_matrix<T>(4);
-    auto L = chol(A);
+    auto L = chol<T,false>(A);
+    auto U = chol<T,true >(A);
     auto Linv = cholinv(A);
 
     assertBoolean(istril(L), true, string("L is lower triangular ") + type_str<T>());
+    assertBoolean(istriu(U), true, string("U is upper triangular ") + type_str<T>());
     assertEqualTol(L * L.ctranspose(), A, static_cast<T>(1e-12), string("Cholesky lower ") + type_str<T>());
+    assertEqualTol(U.ctranspose() * U, A, static_cast<T>(1e-12), string("Cholesky upper ") + type_str<T>());
     assertEqualTol(L * Linv, eye<T>(4), static_cast<T>(1e-12), string("Cholesky inverse ") + type_str<T>());
   }
 };
