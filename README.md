@@ -26,7 +26,7 @@ This library provides the following functionality (but is not limited to):
 - QR decomposition.
 - Linear equation solving.
 
-For further details please refer to the documentation: [matrix_hpp.pdf](matrix_hpp.pdf). The documentation is auto generated directly from the source code by Doxygen.
+For further details please refer to the documentation: [docs/matrix_hpp.pdf](docs/matrix_hpp.pdf). The documentation is auto generated directly from the source code by Doxygen.
 
 ## Hello world example
 
@@ -51,7 +51,7 @@ void main() {
 }
 ```
 
-For more examples, refer to [examples.cpp](examples.cpp) file. Remark that not all features of the library are used in the provided examples.
+For more examples, refer to [examples/examples.cpp](examples/examples.cpp) file. Remark that not all features of the library are used in the provided examples.
 
 ## Tests
 
