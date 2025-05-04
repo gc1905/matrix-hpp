@@ -651,14 +651,14 @@ template<typename T>
 Matrix<T> permute_rows(const Matrix<T>& A, const std::vector<unsigned> perm) {
   if (perm.empty()) throw std::runtime_error("Permutation vector is empty");
 
-  Matrix<T> B(perm.size(), A.cols());
-
-  for (unsigned p = 0; p < perm.size(); p++) {
+  for (unsigned p = 0; p < perm.size(); p++)
     if (!(perm[p] < A.rows())) throw std::out_of_range("Index in permutation vector out of range");
 
+  Matrix<T> B(perm.size(), A.cols());
+
+  for (unsigned p = 0; p < perm.size(); p++)
     for (unsigned c = 0; c < A.cols(); c++)
       B(p,c) = A(perm[p],c);
-  }
 
   return B;
 }
@@ -679,14 +679,14 @@ template<typename T>
 Matrix<T> permute_cols(const Matrix<T>& A, const std::vector<unsigned> perm) {
   if (perm.empty()) throw std::runtime_error("Permutation vector is empty");
 
-  Matrix<T> B(A.rows(), perm.size());
-
-  for (unsigned p = 0; p < perm.size(); p++) {
+  for (unsigned p = 0; p < perm.size(); p++)
     if (!(perm[p] < A.cols())) throw std::out_of_range("Index in permutation vector out of range");
 
+  Matrix<T> B(A.rows(), perm.size());
+
+  for (unsigned p = 0; p < perm.size(); p++)
     for (unsigned r = 0; r < A.rows(); r++)
       B(r,p) = A(r,perm[p]);
-  }
 
   return B;
 }
@@ -709,17 +709,17 @@ Matrix<T> permute_rows_and_cols(const Matrix<T>& A, const std::vector<unsigned> 
   if (perm_rows.empty()) throw std::runtime_error("Row permutation vector is empty");
   if (perm_cols.empty()) throw std::runtime_error("Column permutation vector is empty");
 
-  Matrix<T> B(perm_rows.size(), perm_cols.size());
-
-  for (unsigned pc = 0; pc < perm_cols.size(); pc++) {
+  for (unsigned pc = 0; pc < perm_cols.size(); pc++)
     if (!(perm_cols[pc] < A.cols())) throw std::out_of_range("Column index in permutation vector out of range");
 
-    for (unsigned pr = 0; pr < perm_rows.size(); pr++) {
-      if (!(perm_rows[pr] < A.rows())) throw std::out_of_range("Row index in permutation vector out of range");
+  for (unsigned pr = 0; pr < perm_rows.size(); pr++)
+    if (!(perm_rows[pr] < A.rows())) throw std::out_of_range("Row index in permutation vector out of range");
 
+  Matrix<T> B(perm_rows.size(), perm_cols.size());
+
+  for (unsigned pc = 0; pc < perm_cols.size(); pc++)
+    for (unsigned pr = 0; pr < perm_rows.size(); pr++)
       B(pr,pc) = A(perm_rows[pr],perm_cols[pc]);
-    }
-  }
 
   return B;
 }
