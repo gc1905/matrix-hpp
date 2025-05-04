@@ -84,12 +84,14 @@ inline T csign(T x) {
  */
 class singular_matrix_exception : public std::domain_error {
   public:
+    /** \brief Constructor.
+     */
     singular_matrix_exception(const std::string& message) : std::domain_error(message) {}
 };
 
 /** \brief Result of LU decomposition.
  *
- *  This structure stores the result of LU decomposition, returned by lu() function.
+ *  This structure stores the result of LU decomposition, returned by \ref Mtx::lu() function.
  */
 template<typename T>
 struct LU_result {
@@ -104,7 +106,7 @@ struct LU_result {
 
 /** \brief Result of LU decomposition with pivoting.
  *
- *  This structure stores the result of LU decomposition with pivoting, returned by lup() function.
+ *  This structure stores the result of LU decomposition with pivoting, returned by \ref Mtx::lup() function.
  */
 template<typename T>
 struct LUP_result {
@@ -123,7 +125,7 @@ struct LUP_result {
 
 /** \brief Result of QR decomposition.
  *
- *  This structure stores the result of QR decomposition, returned by, e.g., from qr() function.
+ *  This structure stores the result of QR decomposition, returned by, e.g., from \ref Mtx::qr() function.
  *  Note that the dimensions of \a Q and \a R matrices depends on the employed  variant of QR decomposition.
  */
 template<typename T>
@@ -139,7 +141,7 @@ struct QR_result {
 
 /** \brief Result of Hessenberg decomposition.
  *
- *  This structure stores the result of the Hessenberg decomposition, returned by hessenberg() function.
+ *  This structure stores the result of the Hessenberg decomposition, returned by \ref Mtx::hessenberg() function.
  */
 template<typename T>
 struct Hessenberg_result {
@@ -154,7 +156,7 @@ struct Hessenberg_result {
 
 /** \brief Result of LDL decomposition.
  *
- *  This structure stores the result of LDL decomposition, returned by ldl() function.
+ *  This structure stores the result of LDL decomposition, returned by \ref Mtx::ldl() function.
  */
 template<typename T>
 struct LDL_result {
@@ -169,7 +171,7 @@ struct LDL_result {
 
 /** \brief Result of eigenvalues.
  *
- *  This structure stores the result of matrix eigenvalue calculation, returned by eigenvalues() function.
+ *  This structure stores the result of matrix eigenvalue calculation, returned by \ref Mtx::eigenvalues() function.
  */
 template<typename T>
 struct Eigenvalues_result {
@@ -385,8 +387,8 @@ Matrix<T> imag(const Matrix<std::complex<T>>& C) {
 
 /** \brief Circulant matrix from std::vector.
  *
- *  Constructs a circulant matrix, whose the elements of the first column are set to the elements stored in the std::vector \a v. Size of the 
- *  matrix is equal to the vector size.
+ *  Constructs a circulant matrix, whose the elements of the first column are set to the elements stored in the 
+ *  std::vector \a v. Size of the matrix is equal to the vector size.
  *  \param v vector with data
  *  \return circulant matrix
  */
@@ -417,8 +419,8 @@ inline Matrix<T> ctranspose(const Matrix<T>& A) {
 /** \brief Circular shift.
  *  
  *  Returns a matrix that is created by shifting the columns and rows of an input matrix in a circular manner. <br>
- *  If the specified shift factor is a positive value, columns of the matrix are shifted towards right or rows are shifted towards bottom. 
- *  A negative value may be used to apply shifts in opposite directions.
+ *  If the specified shift factor is a positive value, columns of the matrix are shifted towards right or rows are 
+ *  shifted towards the bottom. A negative value may be used to apply shifts in opposite directions.
  *  \param A matrix
  *  \param row_shift row shift factor
  *  \param col_shift column shift factor
@@ -505,7 +507,7 @@ Matrix<T> concatenate_vertical(const Matrix<T>& A, const Matrix<T>& B) {
 
 /** \brief Frobenius norm.
  *  
- *  Calculates Frobenius norm of real matrix. <br>
+ *  Calculates Frobenius norm of a real matrix. <br>
  *  More information https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
  */
 template<typename T>
@@ -518,7 +520,7 @@ double norm_fro(const Matrix<T>& A) {
   return std::sqrt(sum);
 }
 
-/** \brief Frobenius norm of complex matrix.
+/** \brief Frobenius norm of a complex matrix.
  *  
  *  Calculates Frobenius norm of complex matrix. <br>
  *  More information: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
@@ -537,7 +539,8 @@ double norm_fro(const Matrix<std::complex<T> >& A) {
 
 /** \brief Extract triangular lower part.
  *  
- *  Return a new matrix formed by extracting the lower triangular part of the input matrix, and setting all other elements to zero.
+ *  Return a new matrix formed by extracting the lower triangular part of the input matrix, and setting all other 
+ *  elements to zero.
  */
 template<typename T>
 Matrix<T> tril(const Matrix<T>& A) {
@@ -552,7 +555,8 @@ Matrix<T> tril(const Matrix<T>& A) {
 
 /** \brief Extract triangular upper part.
  *  
- *  Return a new matrix formed by extracting the upper triangular part of the input matrix, and setting all other elements to zero.
+ *  Return a new matrix formed by extracting the upper triangular part of the input matrix, and setting all other 
+ *  elements to zero.
  */
 template<typename T>
 Matrix<T> triu(const Matrix<T>& A) {
@@ -567,8 +571,8 @@ Matrix<T> triu(const Matrix<T>& A) {
 
 /** \brief Lower triangular matrix check.
  *  
- *  Return true if A is a lower triangular matrix, i.e., when it has nonzero entries only on the main diagonal and below. This function
- *  uses hard decision for equality check.
+ *  Return true if A is a lower triangular matrix, i.e., when it has nonzero entries only on the main diagonal and 
+ *  below. This function uses hard decision for equality check.
  */
 template<typename T>
 bool istril(const Matrix<T>& A) {
@@ -580,8 +584,8 @@ bool istril(const Matrix<T>& A) {
 
 /** \brief Lower triangular matrix check.
  *  
- *  Return true if A is a lower triangular matrix, i.e., when it has nonzero entries only on the main diagonal and below. This function
- *  uses hard decision for equality check.
+ *  Return true if A is a lower triangular matrix, i.e., when it has nonzero entries only on the main diagonal and 
+ *  below. This function uses hard decision for equality check.
  */
 template<typename T>
 bool istriu(const Matrix<T>& A) {
@@ -593,8 +597,8 @@ bool istriu(const Matrix<T>& A) {
 
 /** \brief Hessenberg matrix check.
  *  
- *  Return true if A is a, upper Hessenberg matrix, i.e., it is square and has only zero entries below the first subdiagonal. This function
- *  uses hard decision for equality check.
+ *  Return true if \a A is an upper Hessenberg matrix, i.e., it is square and has only zero entries below the first 
+ *  subdiagonal. This function uses hard decision for equality check.
  */
 template<typename T>
 bool ishess(const Matrix<T>& A) {
@@ -609,10 +613,11 @@ bool ishess(const Matrix<T>& A) {
 /** \brief Applies custom function element-wise in-place. 
  *  
  *  Applies specified function \a func to all elements of the input matrix. <br>
- *  This function applies operation to the elements in-place (zero-copy). In order to apply the function to the copy of the matrix without 
- *  modifying the input one, use foreach_elem_copy().
+ *  This function applies operation to the elements in-place (zero-copy). In order to apply the function 
+ *  to the copy of the matrix without modifying the input one, use \ref Mtx::foreach_elem_copy().
  *  \param A input matrix to be modified
- *  \param func function to be applied element-wise to A. It inputs one variable of template type T and returns variable of the same type.
+ *  \param func function to be applied element-wise to \a A. It inputs one variable of template type T and returns 
+ *         variable of the same type.
  */
 template<typename T>
 inline void foreach_elem(Matrix<T>& A, std::function<T(T)> func) {
@@ -623,9 +628,11 @@ inline void foreach_elem(Matrix<T>& A, std::function<T(T)> func) {
 /** \brief Applies custom function element-wise with matrix copy. 
  *  
  *  Applies the specified function \a func to all elements of the input matrix. <br>
- *  This function applies operation to the copy of the input matrix. For in-place (zero-copy) operation, use foreach_elem().
+ *  This function applies operation to the copy of the input matrix. 
+ *  For in-place (zero-copy) operation, use \ref Mtx::foreach_elem().
  *  \param A input matrix
- *  \param func function to be applied element-wise to A. It inputs one variable of template type T and returns variable of the same type
+ *  \param func function to be applied element-wise to A. It inputs one variable of template type T and returns 
+ *         variable of the same type
  *  \return output matrix whose elements were modified by the function \a func
  */
 template<typename T>
@@ -637,8 +644,8 @@ inline Matrix<T> foreach_elem_copy(const Matrix<T>& A, std::function<T(T)> func)
 
 /** \brief Permute rows of the matrix.
  *  
- *  Creates a copy of the matrix with permutation of rows specified as input parameter. Each row in the new matrix is a copy of respective 
- *  row from the input matrix indexed by permutation vector.
+ *  Creates a copy of the matrix with permutation of rows specified as input parameter. Each row in the new matrix 
+ *  is a copy of respective row from the input matrix indexed by permutation vector.
  *  The size of the output matrix is \a perm.size() x \a A.cols(). <br>
  *  \param A input matrix
  *  \param perm permutation vector with row indices
@@ -665,8 +672,8 @@ Matrix<T> permute_rows(const Matrix<T>& A, const std::vector<unsigned> perm) {
 
 /** \brief Permute columns of the matrix.
  *  
- *  Creates a copy of the matrix with permutation of columns specified as input parameter. Each column in the new matrix is a copy of respective 
- *  column from the input matrix indexed by permutation vector.
+ *  Creates a copy of the matrix with permutation of columns specified as input parameter. Each column in the new 
+ *  matrix is a copy of respective column from the input matrix indexed by permutation vector.
  *  The size of the output matrix is \a A.rows() x \a perm.size(). <br>
  *  \param A input matrix
  *  \param perm permutation vector with column indices
@@ -693,8 +700,9 @@ Matrix<T> permute_cols(const Matrix<T>& A, const std::vector<unsigned> perm) {
 
 /** \brief Permute both rows and columns of the matrix.
  *  
- *  Creates a copy of the matrix with permutation of rows and columns specified as input parameter. The result of this function
- *  is equivalent to performing row and column permutations separately - see \ref Mtx::permute_rows() and \ref Mtx::permute_cols(). <br>
+ *  Creates a copy of the matrix with permutation of rows and columns specified as input parameter. The result 
+ *  of this function is equivalent to performing row and column permutations separately - see \ref Mtx::permute_rows() 
+ *  and \ref Mtx::permute_cols(). <br>
  *  The size of the output matrix is \a perm_rows.size() x \a perm_cols.size(). <br>
  *  \param A input matrix
  *  \param perm_rows permutation vector with row indices
@@ -728,8 +736,9 @@ Matrix<T> permute_rows_and_cols(const Matrix<T>& A, const std::vector<unsigned> 
  *  
  *  Performs multiplication of two matrices.
  * 
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_first if set to true, the left-side input matrix will be transposed during operation
  *  \tparam transpose_second if set to true, the right-side input matrix will be transposed during operation
@@ -759,12 +768,13 @@ Matrix<T> mult(const Matrix<T>& A, const Matrix<T>& B) {
   return C;
 }
 
-/** \brief Matrix Hadamard (elementwise) multiplication.
+/** \brief Matrix Hadamard (element-wise) multiplication.
  *  
- *  Performs Hadamard (elementwise) multiplication of two matrices.
+ *  Performs Hadamard (element-wise) multiplication of two matrices.
  * 
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ * conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_first if set to true, the left-side input matrix will be transposed during operation
  *  \tparam transpose_second if set to true, the right-side input matrix will be transposed during operation
@@ -797,8 +807,9 @@ Matrix<T> mult_hadamard(const Matrix<T>& A, const Matrix<T>& B) {
  *  
  *  Performs addition of two matrices.
  * 
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_first if set to true, the left-side input matrix will be transposed during operation
  *  \tparam transpose_second if set to true, the right-side input matrix will be transposed during operation
@@ -831,8 +842,9 @@ Matrix<T> add(const Matrix<T>& A, const Matrix<T>& B) {
  *  
  *  Performs subtraction of two matrices.
  * 
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency 
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_first if set to true, the left-side input matrix will be transposed during operation
  *  \tparam transpose_second if set to true, the right-side input matrix will be transposed during operation
@@ -863,10 +875,12 @@ Matrix<T> subtract(const Matrix<T>& A, const Matrix<T>& B) {
 
 /** \brief Multiplication of matrix by std::vector
  *  
- *  Performs the right multiplication of a matrix with a column vector represented by std::vector. The result of the operation is also a std::vector.
+ *  Performs the right multiplication of a matrix with a column vector represented by std::vector. The result 
+ *  of this operation is also a std::vector.
  *  
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency 
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_matrix if set to true, the matrix will be transposed during operation
  * 
@@ -892,10 +906,12 @@ std::vector<T> mult(const Matrix<T>& A, const std::vector<T>& v) {
 
 /** \brief Multiplication of std::vector by matrix
  *  
- *  Performs the left multiplication of a std::vector with a matrix. The result of the operation is also a std::vector.
+ *  Performs the left multiplication of a std::vector with a matrix. The result of this operation is also a 
+ *  std::vector.
  *  
- *  This function supports template parameterization of input matrix transposition, providing better efficiency than in case of using
- *  ctranspose() function due to zero-copy operation. In case of complex matrices, conjugate (Hermitian) transpose is used.
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency 
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
  * 
  *  \tparam transpose_matrix if set to true, the matrix will be transposed during operation
  * 
@@ -988,7 +1004,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& A) {
 
 /** \brief Matrix sum.
  *  
- *  Calculates a sum of two matrices \f$ A + B\f$. \f$A\f$ and \f$B\f$ must be the same size.
+ *  Calculates a sum of two matrices \f$A + B\f$. \f$A\f$ and \f$B\f$ must be the same size.
  */
 template<typename T>
 inline Matrix<T> operator+(const Matrix<T>& A, const Matrix<T>& B) {
@@ -1188,7 +1204,8 @@ inline bool operator!=(const Matrix<T>& A, const Matrix<T>& b) {
 
 /** \brief Kronecker product.
  *  
- *  Form the Kronecker product of two matrices. Kronecker product is defined block by block as \f$ C = [ A(i,j) \cdot B ] \f$. <br>
+ *  Form the Kronecker product of two matrices. Kronecker product is defined block by block as 
+ *  \f$C = [ A(i,j) \cdot B ]\f$. <br>
  *  More information: https://en.wikipedia.org/wiki/Kronecker_product
  */
 template<typename T>
@@ -1239,14 +1256,15 @@ Matrix<T> adj(const Matrix<T>& A) {
 
 /** \brief Cofactor matrix.
  *  
- *  Calculates first minor of the matrix by deleting row \a p and column \a q. Note that this function does not include sign change required by cofactor calculation. <br>
+ *  Calculates first minor of the matrix by deleting row \a p and column \a q. Note that this function does not include 
+ *  sign change required by cofactor calculation. <br>
  *  More information: https://en.wikipedia.org/wiki/Cofactor_(linear_algebra)
  *  \param A input square matrix
  *  \param p row to be deleted in the output matrix
  *  \param q column to be deleted in the output matrix 
  * 
  *  \throws std::runtime_error when the input matrix is not square
- *  \throws std::out_of_range when row index \a p or column index \q are out of range
+ *  \throws std::out_of_range when row index \a p or column index \a q are out of range
  *  \throws std::runtime_error when input matrix \a A has less than 2 rows
  */
 template<typename T>
@@ -1275,9 +1293,9 @@ Matrix<T> cofactor(const Matrix<T>& A, unsigned p, unsigned q) {
 /** \brief Matrix determinant from on LU decomposition.
  *  
  *  Calculates the determinant of a matrix using LU decomposition with pivoting. <br>
- *  Note that determinant is calculated as a product: \f$ det(L) \cdot det(U) \cdot det(P) \f$, where 
+ *  Note that determinant is calculated as a product: \f$det(L) \cdot det(U) \cdot det(P)\f$, where 
  *  determinants of \a L and \a U are calculated as the product of their diagonal elements, when the 
- *  determinant of P is either 1 or -1 depending on the number of row swaps performed during the pivoting 
+ *  determinant of \a P is either 1 or -1 depending on the number of row swaps performed during the pivoting 
  *  process. <br>
  *  More information: https://en.wikipedia.org/wiki/Determinant
  * 
@@ -1322,8 +1340,9 @@ T det_lu(const Matrix<T>& A) {
 
 /** \brief Matrix determinant.
  *  
- *  Calculates determinant of a square matrix. If the size of the matrix is smaller than 4, the determinant is calculated using hard-coded formulas. 
- *  For matrix sizes equal to 4 and more, determinant is calculated recursively using Laplace expansion. <br>
+ *  Calculates determinant of a square matrix. If the size of the matrix is smaller than 4, the determinant is 
+ *  calculated using hard-coded formulas. For matrix sizes equal to 4 and more, determinant is calculated 
+ *  recursively using Laplace expansion. <br>
  *  More information: https://en.wikipedia.org/wiki/Determinant
  * 
  *  \throws std::runtime_error when the input matrix is not square
@@ -1346,8 +1365,9 @@ T det(const Matrix<T>& A) {
 
 /** \brief LU decomposition.
  *  
- *  Performs LU factorization of the matrix into the the product of a lower triangular matrix \a L and an upper triangular matrix \a U. <br>
- *  This function implements LU factorization without pivoting. Use lup() if pivoting is required. <br>
+ *  Performs LU factorization of the matrix into the the product of a lower triangular matrix \a L and 
+ *  an upper triangular matrix \a U. <br>
+ *  This function implements LU factorization without pivoting. Use \ref Mtx::lup() if pivoting is required. <br>
  *  More information: https://en.wikipedia.org/wiki/LU_decomposition
  *  \param A input square matrix to be decomposed 
  *  \return structure containing calculated \a L and \a U matrices
@@ -1467,7 +1487,7 @@ LUP_result<T> lup(const Matrix<T>& A) {
  *  Calculates an inverse of a square matrix recursively using Gauss-Jordan elimination. <br>
  *  If the inverse doesn't exists, e.g., because the input matrix was singular, an empty matrix is returned. <br>
  *  More information: https://en.wikipedia.org/wiki/Gaussian_elimination <br>
- *  Using inv() function instead of this one offers better performance for matrices of size smaller than 4.
+ *  Using this is function is generally not recommended, please refer to \ref Mtx::inv() instead.
  * 
  *  \throws std::runtime_error when the input matrix is not square
  *  \throws singular_matrix_exception when input matrix is singular
@@ -1518,7 +1538,7 @@ Matrix<T> inv_gauss_jordan(const Matrix<T>& A) {
 /** \brief Matrix inverse for lower triangular matrix.
  *  
  *  Calculates an inverse of lower triangular matrix. <br>
- *  This function provides more optimal performance than inv() for lower triangular matrices. However, validation of 
+ *  This function provides more optimal performance than \ref Mtx::inv() for lower triangular matrices. However, validation of 
  *  triangular input matrix structure is not performed. It is up to the user to decide when this function can be used and, 
  *  if needed, perform required validations. <br>
  * 
@@ -1551,7 +1571,7 @@ Matrix<T> inv_tril(const Matrix<T>& A) {
 /** \brief Matrix inverse for upper triangular matrix.
  *  
  *  Calculates an inverse of upper triangular matrix. <br>
- *  This function provides more optimal performance than inv() for upper triangular matrices. However, validation of 
+ *  This function provides more optimal performance than \ref Mtx::inv() for upper triangular matrices. However, validation of 
  *  triangular input matrix structure is not performed. It is up to the user to decide when this function can be used and, 
  *  if needed, perform required validations. <br>
  * 
@@ -1585,7 +1605,7 @@ Matrix<T> inv_triu(const Matrix<T>& A) {
  *  
  *  Calculates an inverse of symmetric (for real input) or Hermitian (for complex input) positive definite matrix using
  *  Cholesky decomposition. <br>
- *  This function provides more optimal performance than inv() for symmetric matrices. However, validation of 
+ *  This function provides more optimal performance than \ref Mtx::inv() for symmetric matrices. However, validation of 
  *  input matrix structure is not performed. It is up to the user to decide when this function can be used and, 
  *  if needed, perform required validations. <br>
  *  More information: https://en.wikipedia.org/wiki/Gaussian_elimination <br>
@@ -1602,7 +1622,7 @@ Matrix<T> inv_posdef(const Matrix<T>& A) {
 /** \brief Matrix inverse for general square matrix.
  *  
  *  Calculates an inverse of square matrix using matrix. <br>
- *  This function provides more optimal performance than inv() for upper triangular matrices. However, validation of 
+ *  This function provides more optimal performance than \ref Mtx::inv() for upper triangular matrices. However, validation of 
  *  input matrix structure is not performed. It is up to the user to decide when this function can be used and, 
  *  if needed, perform required validations. <br>
  * 
@@ -1623,8 +1643,9 @@ Matrix<T> inv_square(const Matrix<T>& A) {
 
 /** \brief Matrix inverse (universal).
  *  
- *  Calculates an inverse of a square matrix. If the size of the matrix is smaller than 4, inverse is calculated using hard-coded formulas. 
- *  For matrix sizes equal to 4 and more, determinant is calculated recursively using Gauss-Jordan elimination. <br>
+ *  Calculates an inverse of a square matrix. If the size of the matrix is smaller than 4, inverse is calculated using 
+ *  hard-coded formulas. For matrix sizes equal to 4 and more, determinant is calculated recursively using Gauss-Jordan 
+ *  elimination. <br>
  *  If the inverse doesn't exists, e.g., because the input matrix was singular, an empty matrix is returned. <br>
  *  More information: https://en.wikipedia.org/wiki/Gaussian_elimination
  * 
@@ -1670,11 +1691,13 @@ Matrix<T> inv(const Matrix<T>& A) {
   }
 }
 
-/** \brief Moore-Penrose pseudoinverse.
+/** \brief Moore-Penrose pseudo-inverse.
  *  
- *  Calculates the Moore-Penrose pseudoinverse \f$A^+\f$ of a matrix \f$A\f$. <br>
- *  If \f$A\f$ has linearly independent columns, the pseudoinverse is a left inverse, that is \f$A^+ A = I\f$, and \f$A^+ = (A' A)^{-1} A'\f$.
- *  If \f$A\f$ has linearly independent rows, the pseudoinverse is a right inverse, that is \f$A A^+ = I\f$, and \f$A^+ = A' (A A')^{-1}\f$.
+ *  Calculates the Moore-Penrose pseudo-inverse \f$A^+\f$ of a matrix \f$A\f$. <br>
+ *  If \f$A\f$ has linearly independent columns, the pseudo-inverse is a left inverse, that is 
+ *  \f$A^+ A = I\f$, and \f$A^+ = (A' A)^{-1} A'\f$.
+ *  If \f$A\f$ has linearly independent rows, the pseudo-inverse is a right inverse, that is 
+ *  \f$A A^+ = I\f$, and \f$A^+ = A' (A A')^{-1}\f$.
  *  More information: https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse
  */
 template<typename T>
@@ -1705,10 +1728,11 @@ T trace(const Matrix<T>& A) {
 
 /** \brief Condition number of a matrix.
  *  
- *  Calculates condition number of a matrix. The condition number of a matrix measures the sensitivity of a system solution of linear equations to errors in the data. 
+ *  Calculates condition number of a matrix. The condition number of a matrix measures sensitivity of a  
+ *  solution for system of linear equations to errors in the input data. 
  *  The condition number is calculated by: <br>
  *  \f$ \textrm{cond} = \textrm{norm}(A) * \textrm{norm}(A^{-1})\f$ <br>
- *  Frobenius norm is used for the sake of calculations. 
+ *  Frobenius norm is used for the sake of calculations. See \ref Mtx::norm_fro().
  */
 template<typename T>
 double cond(const Matrix<T>& A) {
@@ -1722,13 +1746,14 @@ double cond(const Matrix<T>& A) {
 
 /** \brief Cholesky decomposition.
  *
- *  The Cholesky decomposition of a Hermitian positive-definite matrix \f$A\f$ is a decomposition of the form \f$ A = LL^H \f$,
- *  where \f$L\f$ is a lower triangular matrix with real and positive diagonal entries, and \f$^H\f$ denotes the conjugate transpose. <br>
- *  Alternatively, the decomposition can be computed as \f$ A = U^H U \f$ with \f$U\f$ being upper-triangular matrix. Selection between lower and 
- *  upper triangular factor can be done via template parameter. <br>
- *  Input matrix must be square and Hermitian. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. 
- *  Only the lower-triangular or upper-triangular and diagonal elements of the input matrix are used for calculations. No checking is performed 
- *  to verify if the input matrix is Hermitian. <br>
+ *  The Cholesky decomposition of a Hermitian positive-definite matrix \f$A\f$ is a decomposition of the 
+ *  form \f$ A = LL^H \f$, where \f$L\f$ is a lower triangular matrix with real and positive diagonal entries, 
+ *  and \f$^H\f$ denotes the conjugate transpose. <br>
+ *  Alternatively, the decomposition can be computed as \f$ A = U^H U \f$ with \f$U\f$ being upper-triangular matrix. 
+ *  Selection between lower and upper triangular factor can be done via template parameter. <br>
+ *  Input matrix must be square and Hermitian. If the matrix is not Hermitian positive-definite or is ill-conditioned, 
+ *  the result may be unreliable. Only the lower-triangular or upper-triangular and diagonal elements of the input 
+ *  matrix are used for calculations. No checking is performed to verify if the input matrix is Hermitian. <br>
  *  More information: https://en.wikipedia.org/wiki/Cholesky_decomposition
  * 
  *  \tparam is_upper if set to true, the result is provided for upper-triangular factor \f$U\f$. If set to false, the result 
@@ -1772,8 +1797,9 @@ Matrix<T> chol(const Matrix<T>& A) {
 /** \brief Inverse of Cholesky decomposition.
  *
  *  This function directly calculates the inverse of Cholesky decomposition \f$L^{-1}\f$ such that \f$ A = LL^H \f$. <br>
- *  See chol() for reference on Cholesky decomposition. <br>
- *  Input matrix must be square. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. <br>
+ *  See \ref Mtx::chol() for reference on Cholesky decomposition. <br>
+ *  Input matrix must be square. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result 
+ *  may be unreliable. <br>
  *  More information: https://en.wikipedia.org/wiki/Cholesky_decomposition
  * 
  *  \throws std::runtime_error when the input matrix is not square
@@ -1813,11 +1839,12 @@ Matrix<T> cholinv(const Matrix<T>& A) {
 
 /** \brief LDL decomposition.
  *
- *  The LDL decomposition of a Hermitian positive-definite matrix A, is a decomposition of the form: <br>
+ *  The LDL decomposition of a Hermitian positive-definite matrix \a A, is a decomposition of the form: <br>
  *  \f$ A = L D L^H \f$ <br>
- *  where \f$L\f$ is a lower unit triangular matrix with ones at the diagonal, \f$L^H\f$ denotes the conjugate transpose of \f$L\f$, and \f$D\f$ 
- *  denotes diagonal matrix. <br>
- *  Input matrix must be square. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result may be unreliable. <br>
+ *  where \f$L\f$ is a lower unit triangular matrix with ones at the diagonal, \f$L^H\f$ denotes the conjugate 
+ *  transpose of \f$L\f$, and \f$D\f$ denotes diagonal matrix. <br>
+ *  Input matrix must be square. If the matrix is not Hermitian positive-definite or is ill-conditioned, the result 
+ *  may be unreliable. <br>
  *  More information: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition
  *  \param A input positive-definite matrix to be decomposed 
  *  \return structure encapsulating calculated \a L and \a D
@@ -1861,8 +1888,8 @@ LDL_result<T> ldl(const Matrix<T>& A) {
 
 /** \brief Reduced QR decomposition based on Gram-Schmidt method. 
  *
- *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$ A = QR \f$ of an orthonormal matrix \f$Q\f$ and an upper
- *  triangular matrix \f$R\f$. <br>
+ *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$A = QR\f$ of an orthonormal 
+ *  matrix \f$Q\f$ and an upper triangular matrix \f$R\f$. <br>
  *  This function implements the reduced QR decomposition based on Gram-Schmidt method. <br>
  *  More information: https://en.wikipedia.org/wiki/QR_decomposition
  *  \param A input matrix to be decomposed, size \a n x \a m
@@ -1927,14 +1954,14 @@ Matrix<T> householder_reflection(const Matrix<T>& a) {
 
 /** \brief QR decomposition based on Householder method.
  *
- *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$ A = QR \f$ of an orthonormal matrix \f$Q\f$ and an upper
- *  triangular matrix \f$R\f$. <br>
+ *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$ A = QR \f$ of an orthonormal 
+ *  matrix \f$Q\f$ and an upper triangular matrix \f$R\f$. <br>
  *  This function implements QR decomposition based on Householder reflections method. <br>
  *  More information: https://en.wikipedia.org/wiki/QR_decomposition
  *  \param A input matrix to be decomposed, size \a n x \a m
  *  \param calculate_Q indicates if \a Q to be calculated
- *  \return structure encapsulating calculated \a Q of size \a n x \a n and \a R of size \a n x \a m. \a Q is calculated only 
- *          when \a calculate_Q = True.
+ *  \return structure encapsulating calculated \a Q of size \a n x \a n and \a R of size \a n x \a m. 
+ *          \a Q is calculated only when \a calculate_Q = True.
  */
 template<typename T>
 QR_result<T> qr_householder(const Matrix<T>& A, bool calculate_Q = true) {
@@ -1981,13 +2008,14 @@ QR_result<T> qr_householder(const Matrix<T>& A, bool calculate_Q = true) {
 
 /** \brief QR decomposition.
  *
- *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$ A = QR \f$ of an orthonormal matrix \f$Q\f$ and an upper
- *  triangular matrix \f$R\f$. <br>
- *  Currently, this function is a wrapper around qr_householder(). Refer to qr_red_gs() for alternative implementation. <br>
+ *  The QR decomposition is a decomposition of a matrix \f$A\f$ into a product \f$ A = QR \f$ of an orthonormal 
+ *  matrix \f$Q\f$ and an upper triangular matrix \f$R\f$. <br>
+ *  Currently, this function is a wrapper around \ref Mtx::qr_householder(). Refer to qr_red_gs() for alternative 
+ *  implementation. <br>
  *  \param A input matrix to be decomposed 
  *  \param calculate_Q indicates if \a Q to be calculated
- *  \return structure encapsulating calculated \a Q of size \a n x \a n and \a R of size \a n x \a m. \a Q is calculated only 
- *          when \a calculate_Q = True.
+ *  \return structure encapsulating calculated \a Q of size \a n x \a n and \a R of size \a n x \a m. 
+ *          \a Q is calculated only when \a calculate_Q = True.
  */
 template<typename T>
 inline QR_result<T> qr(const Matrix<T>& A, bool calculate_Q = true) {
@@ -2053,8 +2081,8 @@ Hessenberg_result<T> hessenberg(const Matrix<T>& A, bool calculate_Q = true) {
 
 /** \brief Wilkinson's shift for complex eigenvalues.
  *
- *  Computes Wilkinson's shift value \a mu for complex eigenvalues of input matrix. Wilkinson's shift is calculated as eigenvalue of the bottom 
- *  2 x 2 principal minor closest to the corner entry of the matrix. <br>
+ *  Computes Wilkinson's shift value \a mu for complex eigenvalues of input matrix. Wilkinson's shift is calculated 
+ *  as eigenvalue of the bottom 2 x 2 principal minor closest to the corner entry of the matrix. <br>
  *  Input must be a square matrix in Hessenberg form.
  * 
  *  \throws std::runtime_error when the input matrix is not square
@@ -2152,8 +2180,9 @@ Eigenvalues_result<T> eigenvalues(const Matrix<T>& A, T tol = 1e-12, unsigned ma
 
 /** \brief Solves the upper triangular system.
  *
- *  Return the matrix left division of \a U and \a B, where \a U is square and upper triangular. It is equivalent to solving the system \f$ U \cdot X = B \f$ with 
- *  respect to \f$ X \f$. The system is solved for each column of \a B using backwards substitution. <br>
+ *  Return the matrix left division of \a U and \a B, where \a U is square and upper triangular. It is equivalent 
+ *  to solving the system \f$ U \cdot X = B \f$ with respect to \f$ X \f$. The system is solved for each column of 
+ *  \a B using backwards substitution. <br>
  *  A minimum norm solution is computed if the coefficient matrix is singular.
  *
  *  \param U left side matrix of size \a N x \a N. Must be square and upper triangular
@@ -2194,8 +2223,9 @@ Matrix<T> solve_triu(const Matrix<T>& U, const Matrix<T>& B) {
 
 /** \brief Solves the lower triangular system.
  *
- *  Return the matrix left division of \a L and \a B, where \a L is square and lower triangular. It is equivalent to solving the system \f$ L \cdot X = B \f$ with 
- *  respect to \f$ X \f$. The system is solved for each column of \a B using forwards substitution. <br>
+ *  Return the matrix left division of \a L and \a B, where \a L is square and lower triangular. It is equivalent 
+ *  to solving the system \f$ L \cdot X = B \f$ with respect to \f$ X \f$. The system is solved for each column 
+ *  of \a B using forwards substitution. <br>
  *  A minimum norm solution is computed if the coefficient matrix is singular.
  *
  *  \param L left side matrix of size \a N x \a N. Must be square and lower triangular
@@ -2236,8 +2266,9 @@ Matrix<T> solve_tril(const Matrix<T>& L, const Matrix<T>& B) {
 
 /** \brief Solves the square system.
  *
- *  Return the matrix left division of \a A and \a B, where \a A is square. It is equivalent to solving the system \f$ A \cdot X = B \f$ with 
- *  respect to \f$ X \f$. The system is solved for each column of \a B using LU decomposition followed by forward and backward propagation. <br>
+ *  Return the matrix left division of \a A and \a B, where \a A is square. It is equivalent to solving the system 
+ *  \f$A \cdot X = B\f$ with respect to \f$X\f$. The system is solved for each column of \a B using LU decomposition 
+ *  followed by forward and backward propagation. <br>
  *  A minimum norm solution is computed if the coefficient matrix is singular.
  *
  *  \param A left side matrix of size \a N x \a N. Must be square.
@@ -2271,8 +2302,9 @@ Matrix<T> solve_square(const Matrix<T>& A, const Matrix<T>& B) {
 
 /** \brief Solves the positive definite (Hermitian) system.
  *
- *  Return the matrix left division of \a A and \a B, where \a A is positive definite matrix. It is equivalent to solving the system \f$ A \cdot X = B \f$  
- *  with respect to \f$ X \f$. The system is solved for each column of \a B using Cholesky decomposition followed by forward and backward propagation. <br>
+ *  Return the matrix left division of \a A and \a B, where \a A is positive definite matrix. It is equivalent to solving 
+ *  the system \f$A \cdot X = B\f$ with respect to \f$X\f$. The system is solved for each column of \a B using Cholesky 
+ *  decomposition followed by forward and backward propagation. <br>
  *  A minimum norm solution is computed if the coefficient matrix is singular.
  *
  *  \param A left side matrix of size \a N x \a N. Must be square and positive definite.
@@ -2331,15 +2363,18 @@ class Matrix {
 
     /** \brief Rectangular matrix constructor with initialization.
      *  
-     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements stored in the input \a array. 
+     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements 
+     *  stored in the input \a array. 
      *  The elements of the matrix are filled in a column-major order.
      */
     Matrix(const T* array, unsigned nrows, unsigned ncols);
 
     /** \brief Rectangular matrix constructor with initialization.
      *  
-     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements stored in the input std::vector. 
-     *  Size of the vector must be equal to the number of matrix elements. The elements of the matrix are filled in a column-major order.
+     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements 
+     *  stored in the input std::vector. 
+     *  Size of the vector must be equal to the number of matrix elements. The elements of the matrix are filled in 
+     *  a column-major order.
      *
      *  \throws std::runtime_error when the size of initialization vector is not consistent with matrix dimensions
      */
@@ -2347,8 +2382,10 @@ class Matrix {
 
     /** \brief Rectangular matrix constructor with initialization.
      *  
-     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements stored in the input std::initializer_list. 
-     *  Size of the vector must be equal to the number of matrix elements. The elements of the matrix are filled in a column-major order.
+     *  Constructs a matrix of size \a nrows x \a ncols. The elements of the matrix are initialized using the elements 
+     *  stored in the input std::initializer_list. 
+     *  Size of the vector must be equal to the number of matrix elements. The elements of the matrix are filled in 
+     *  a column-major order.
      *
      *  \throws std::runtime_error when the size of initialization list is not consistent with matrix dimensions
      */
@@ -2364,7 +2401,8 @@ class Matrix {
 
     /** \brief Extract a submatrix.
      *  
-     *  Constructs a submatrix using the specified range of row and column indices. The submatrix contains a copy of elements placed between row indices indicated by
+     *  Constructs a submatrix using the specified range of row and column indices. The submatrix contains a copy of elements 
+     *  placed between row indices indicated by
      *  \a row_first and \a row_last, and column indices \a col_first and \a col_last. Both index ranges are inclusive.
      *
      *  \throws std::out_of_range when row or column index is out of range of matrix dimensions
@@ -2373,8 +2411,8 @@ class Matrix {
 
     /** \brief Embed a submatrix.
      *  
-     *  Embed elements of the input submatrix at the specified range of row and column indices. The elements of input submatrix are placed starting at row index incated by
-     *  \a row_first and column indices \a col_first.
+     *  Embed elements of the input submatrix at the specified range of row and column indices. The elements of input submatrix 
+     *  are placed starting at row index incated by \a row_first and column indices \a col_first.
      * 
      *  \throws std::out_of_range when row or column index is out of range of matrix dimensions
      *  \throws std::runtime_error when input matrix is empty (i.e., it has zero elements)
@@ -2412,13 +2450,15 @@ class Matrix {
 
     /** \brief Memory pointer.
      *  
-     *  Returns a pointer to the selected element in the array used internally by the matrix. The matrix memory is arranged in a column-major order.
+     *  Returns a pointer to the selected element in the array used internally by the matrix. The matrix memory is arranged 
+     *  in a column-major order.
      */
     T* ptr(unsigned row, unsigned col);
 
     /** \brief Memory pointer.
      *  
-     *  Returns a pointer to the first element in the array used internally by the matrix. The matrix memory is arranged in a column-major order.
+     *  Returns a pointer to the first element in the array used internally by the matrix. The matrix memory is arranged 
+     *  in a column-major order.
      *
      *  \throws std::out_of_range when row or column index is out of range
      */
@@ -2447,12 +2487,12 @@ class Matrix {
 
     /** \brief Emptiness check.
      *  
-     *  Check if the matrix is empty, i.e. if both dimensions are equal zero and the matrix stores no elements.
+     *  Check if the matrix is empty, i.e., if both dimensions are equal zero and the matrix stores no elements.
      */
     bool isempty() const;
 
     /** \brief Squareness check.
-     *  Check if the matrix is square, i.e. the width of the first and the second dimensions are equal.
+     *  Check if the matrix is square, i.e., the width of the first and the second dimensions are equal.
      */
     bool issquare() const;
 
@@ -2471,19 +2511,19 @@ class Matrix {
 
     /** \brief Matrix capacity.
      *  
-     *  Returns the number of the elements stored within the matrix, i.e. a product of both dimensions.
+     *  Returns the number of the elements stored within the matrix, i.e., a product of both dimensions.
      */
     unsigned numel() const;
 
     /** \brief Number of rows.
      *  
-     *  Returns the number of rows of the matrix, i.e. the value of the first dimension.
+     *  Returns the number of rows of the matrix, i.e., the size of the first dimension.
      */
     unsigned rows() const;
 
     /** \brief Number of columns.
      *  
-     *  Returns the number of columns of the matrix, i.e. the value of the second dimension.
+     *  Returns the number of columns of the matrix, i.e., the size of the second dimension.
      */
     unsigned cols() const;
 
@@ -2564,13 +2604,15 @@ class Matrix {
 
     /** \brief Matrix fill operator.
      *  
-     *  Assigns value of each element in the matrix to a given scalar. This method does not affect the shape and capacity of the matrix. 
+     *  Assigns value of each element in the matrix to a given scalar. This method does not affect the shape and 
+     *  capacity of the matrix. 
      */
     Matrix<T>& operator=(T);
 
     /** \brief Vector cast operator.
      *  
-     *  Converts the matrix to a vector with \a nrows x \a ncols elements. Element order in the vector follow column-major format.
+     *  Converts the matrix to a vector with \a nrows x \a ncols elements. Element order in the vector follow 
+     *  column-major format.
      */
     explicit operator std::vector<T>() const;
     std::vector<T> to_vector() const;
@@ -2667,7 +2709,8 @@ class Matrix {
 
     /** \brief Column from vector.
      *  
-     *  Assigns values of elements of a column \a col to the values stored in the input vector. Size of the vector must be equal to the number of rows of the matrix.
+     *  Assigns values of elements of a column \a col to the values stored in the input vector. Size of the vector 
+     *  must be equal to the number of rows of the matrix.
      *
      *  \throws std::runtime_error when std::vector size is not equal to number of rows
      *  \throws std::out_of_range when column index out of range
@@ -2676,9 +2719,10 @@ class Matrix {
 
     /** \brief Row from vector.
      *  
-     *  Assigns values of elements of a row \a col to the values stored in the input vector. Size of the vector must be equal to the number of columns of the matrix.
+     *  Assigns values of elements of a row \a col to the values stored in the input vector. Size of the vector 
+     *  must be equal to the number of columns of the matrix.
      *
-     *  \throws std::runtime_error when std::vector size is not equal to number of columnc
+     *  \throws std::runtime_error when std::vector size is not equal to number of columns
      *  \throws std::out_of_range when row index out of range
      */
     void row_from_vector(const std::vector<T>&, unsigned row);
