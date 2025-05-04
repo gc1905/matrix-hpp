@@ -691,6 +691,39 @@ Matrix<T> permute_cols(const Matrix<T>& A, const std::vector<unsigned> perm) {
   return B;
 }
 
+/** \brief Permute both rows and columns of the matrix.
+ *  
+ *  Creates a copy of the matrix with permutation of rows and columns specified as input parameter. The result of this function
+ *  is equivalent to performing row and column permutations separately - see \ref Mtx::permute_rows() and \ref Mtx::permute_cols(). <br>
+ *  The size of the output matrix is \a perm_rows.size() x \a perm_cols.size(). <br>
+ *  \param A input matrix
+ *  \param perm_rows permutation vector with row indices
+ *  \param perm_cols permutation vector with column indices
+ *  \return output matrix created by row and column permutation of \a A
+ * 
+ *  \throws std::runtime_error when any of permutation vectors is empty
+ *  \throws std::out_of_range when any index in permutation vector is out of range
+ */
+template<typename T>
+Matrix<T> permute_rows_and_cols(const Matrix<T>& A, const std::vector<unsigned> perm_rows, const std::vector<unsigned> perm_cols) {
+  if (perm_rows.empty()) throw std::runtime_error("Row permutation vector is empty");
+  if (perm_cols.empty()) throw std::runtime_error("Column permutation vector is empty");
+
+  Matrix<T> B(perm_rows.size(), perm_cols.size());
+
+  for (unsigned pc = 0; pc < perm_cols.size(); pc++) {
+    if (!(perm_cols[pc] < A.cols())) throw std::out_of_range("Column index in permutation vector out of range");
+
+    for (unsigned pr = 0; pr < perm_rows.size(); pr++) {
+      if (!(perm_rows[pr] < A.rows())) throw std::out_of_range("Row index in permutation vector out of range");
+
+      B(pr,pc) = A(perm_rows[pr],perm_cols[pc]);
+    }
+  }
+
+  return B;
+}
+
 /** \brief Matrix multiplication.
  *  
  *  Performs multiplication of two matrices.

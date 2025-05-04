@@ -358,8 +358,16 @@ class TC_Permutations: public Testcase_Abstract {
                                    10, 8, 9,11}, 3, 4);
     auto A_permute_col = permute_cols(A, permute_col);
 
+    auto A_permute_row_and_col = permute_rows_and_cols(A, permute_row, permute_col);
+    Matrix<int> A_permute_row_and_col_ref({ 6, 4, 5, 7,
+                                           10, 8, 9,11,
+                                            3, 1, 2, 4,
+                                           10, 8, 9,11,
+                                            6, 4, 5, 7}, 5, 4);
+
     assertEqual(A_permute_row, A_permute_row_ref, "Row permutation");
     assertEqual(A_permute_col, A_permute_col_ref, "Column permutation");
+    assertEqual(A_permute_row_and_col, A_permute_row_and_col_ref, "Row and column permutation");
   }
 };
 
