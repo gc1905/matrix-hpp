@@ -33,6 +33,7 @@
 #include <limits>
 #include <functional>
 #include <algorithm>
+#include <utility>
 
 namespace Mtx {
 
@@ -2527,6 +2528,13 @@ class Matrix {
      */
     unsigned cols() const;
 
+    /** \brief Matrix shape.
+     *  
+     *  Returns std::pair with the \a first element providing the number of rows and the \a second element providing 
+     *  the number of columns.
+     */
+    std::pair<unsigned,unsigned> shape() const;
+
     /** \brief Transpose a matrix.
      *  
      *  Returns a matrix that is a transposition of an input matrix.
@@ -3004,6 +3012,11 @@ inline unsigned Matrix<T>::rows() const {
 template<typename T>
 inline unsigned Matrix<T>::cols() const { 
   return ncols; 
+}
+
+template<typename T>
+inline std::pair<unsigned,unsigned> Matrix<T>::shape() const {
+  return std::pair<unsigned,unsigned>(nrows,ncols);
 }
 
 template<typename T>
