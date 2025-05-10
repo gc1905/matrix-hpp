@@ -270,13 +270,20 @@ class TC_Norms: public Testcase_Abstract {
     assertDouble(norm_fro(E), 3.0, 1e-12, "Frobenius eye(9)");
     assertDouble(cond(E), 9.0, 1e-12, "Condition eye(9)");
 
-    Matrix<double> A({ 2.052113613487281e-01,-1.525304055468150e+00,-2.316040468802091e+00,-2.428753334959137e+00,
-                      -9.867569768350846e-01, 1.350146369363881e-01,-2.874386478765925e-02,-8.111123486654980e-01,
-                      -6.499990607857457e-01, 3.725026263812751e-01,-1.160188911359364e+00,-2.879539632448196e+00,
-                       1.654519282512769e-01, 1.517864378728704e-01,-4.698341950083968e-01,-1.813775783139517e+00}, 4, 4);
+    Matrix<double> A({ 2,-1,-2,-2,
+                      -9, 1,-2,-8,
+                      -6, 3,-1,-2,
+                       1, 1,-4,-1}, 4, 4);
 
-    assertDouble(norm_fro(A), 5.389079896536130, 1e-12, "Frobenius 4x4");
-    assertDouble(cond(A), 21.90459850374101, 1e-12, "Condition 4x4");
+    assertDouble(norm_fro(A), 15.23154621172782, 1e-12, "Frobenius 4x4");
+    assertDouble(cond(A), 52.87099603962670, 1e-12, "Condition 4x4");
+
+    Matrix<complex<double>> B({{4,+3},{-3,+8},{4,+5},{ 7,+4},
+                               {0,+7},{-8,-8},{7,+1},{ 0,+8},
+                               {1,+0},{ 8,+3},{8,-5},{-9,-6}}, 3, 4);
+                     
+    assertDouble(norm_fro(B), 27.83882181415011, 1e-12, "Frobenius 3x4 complex");
+    assertDouble(cond(B.get_submatrix(0,2,0,2)), 9.132131063632931, 1e-12, "Condition 3x3 complex");
   }
 };
 

@@ -516,7 +516,7 @@ double norm_fro(const Matrix<T>& A) {
   double sum = 0;
 
   for (unsigned i = 0; i < A.numel(); i++)
-    sum += A(i) * A(i);
+    sum += A(i) * cconj(A(i));
 
   return std::sqrt(sum);
 }
@@ -530,10 +530,8 @@ template<typename T>
 double norm_fro(const Matrix<std::complex<T> >& A) {
   double sum = 0;
 
-  for (unsigned i = 0; i < A.numel(); i++) {
-    T x = std::abs(A(i));
-    sum += x * x;
-  }
+  for (unsigned i = 0; i < A.numel(); i++)
+    sum += std::real(A(i) * cconj(A(i)));
 
   return std::sqrt(sum);
 }
