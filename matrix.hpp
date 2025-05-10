@@ -76,6 +76,22 @@ inline T csign(T x) {
   return std::exp(y);
 }
 
+/** \brief Complex real part helper.
+ *
+ *  Helper function to allow for generalization of code for complex and real types. <br>
+ *  For real numbers, this function returns the input argument unchanged. <br>
+ *  For complex numbers, this function returns the real part.
+ */
+template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+inline T creal(std::complex<T> x) {
+  return std::real(x);
+}
+
+template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+inline T creal(T x) {
+  return x;
+}
+
 /** \brief Singular matrix exception.
  *
  *  This exception is thrown by functions like matrix inversion or factorization that are defined to operate on non-singular
@@ -508,7 +524,7 @@ Matrix<T> concatenate_vertical(const Matrix<T>& A, const Matrix<T>& B) {
 
 /** \brief Frobenius norm.
  *  
- *  Calculates Frobenius norm of a real matrix. <br>
+ *  Calculates Frobenius norm of a matrix. <br>
  *  More information https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
  */
 template<typename T>
@@ -516,22 +532,7 @@ double norm_fro(const Matrix<T>& A) {
   double sum = 0;
 
   for (unsigned i = 0; i < A.numel(); i++)
-    sum += A(i) * cconj(A(i));
-
-  return std::sqrt(sum);
-}
-
-/** \brief Frobenius norm of a complex matrix.
- *  
- *  Calculates Frobenius norm of complex matrix. <br>
- *  More information: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
- */
-template<typename T>
-double norm_fro(const Matrix<std::complex<T> >& A) {
-  double sum = 0;
-
-  for (unsigned i = 0; i < A.numel(); i++)
-    sum += std::real(A(i) * cconj(A(i)));
+    sum += creal(A(i) * cconj(A(i)));
 
   return std::sqrt(sum);
 }
