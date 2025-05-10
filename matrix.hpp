@@ -549,7 +549,7 @@ Matrix<T> tril(const Matrix<T>& A) {
 
   for (unsigned row = 0; row < B.rows(); row++)
     for (unsigned col = row+1; col < B.cols(); col++)
-      B(row,col) = 0;
+      B(row,col) = static_cast<T>(0);
 
   return B;
 }
@@ -565,7 +565,7 @@ Matrix<T> triu(const Matrix<T>& A) {
 
   for (unsigned col = 0; col < B.cols(); col++)
     for (unsigned row = col+1; row < B.rows(); row++)
-      B(row,col) = 0;
+      B(row,col) = static_cast<T>(0);
 
   return B;
 }
@@ -1243,11 +1243,11 @@ Matrix<T> adj(const Matrix<T>& A) {
 
   Matrix<T> B(A.rows(), A.cols());
   if (A.rows() == 1) { 
-    B(0) = 1.0;
+    B(0) = static_cast<T>(1.0);
   } else {
     for (unsigned i = 0; i < A.rows(); i++) { 
       for (unsigned j = 0; j < A.cols(); j++) {
-        T sgn = ((i + j) % 2 == 0) ? 1.0 : -1.0;
+        T sgn = static_cast<T>(1.0)(((i + j) % 2 == 0) ? (1.0) : (-1.0));
         B(j,i) = sgn * det(cofactor(A,i,j)); 
       } 
     }
@@ -1317,7 +1317,7 @@ T det_lu(const Matrix<T>& A) {
 
   // Determinant of P
   unsigned len = res.P.size();
-  T detP = 1;
+  T detP = static_cast<T>(1);
 
   std::vector<unsigned> p(res.P);
   std::vector<unsigned> q;
@@ -1555,7 +1555,7 @@ Matrix<T> inv_tril(const Matrix<T>& A) {
   auto IA = zeros<T>(N);
  
   for (unsigned i = 0; i < N; i++) {
-    if (A(i,i) == 0.0) throw singular_matrix_exception("Division by zero in inv_tril");
+    if (A(i,i) == static_cast<T>(0.0)) throw singular_matrix_exception("Division by zero in inv_tril");
 
     IA(i,i) = static_cast<T>(1.0) / A(i,i);
     for (unsigned j = 0; j < i; j++) {
@@ -1588,11 +1588,11 @@ Matrix<T> inv_triu(const Matrix<T>& A) {
   auto IA = zeros<T>(N); 
 
   for (int i = N - 1; i >= 0; i--) {
-    if (A(i,i) == 0.0) throw singular_matrix_exception("Division by zero in inv_triu");
+    if (A(i,i) == static_cast<T>(0.0)) throw singular_matrix_exception("Division by zero in inv_triu");
 
     IA(i, i) = static_cast<T>(1.0) / A(i,i);
     for (int j = N - 1; j > i; j--) {
-      T s = 0.0;
+      T s = static_cast<T>(0.0);
       for (int k = i + 1; k <= j; k++)
         s += A(i,k) * IA(k,j);
       IA(i,j) = -s * IA(i,i);
@@ -1662,7 +1662,7 @@ Matrix<T> inv(const Matrix<T>& A) {
   } else if (A.rows() < 4) {
     T d = det(A);
 
-    if (d == 0.0) throw singular_matrix_exception("Singular matrix in inv");
+    if (d == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in inv");
 
     Matrix<T> IA(A.rows(), A.rows());
     T invdet = static_cast<T>(1.0) / d;
@@ -1774,7 +1774,7 @@ Matrix<T> chol(const Matrix<T>& A) {
   Matrix<T> C = is_upper ? triu(A) : tril(A);
 
   for (unsigned j = 0; j < N; j++) {
-    if (C(j,j) == 0.0) throw singular_matrix_exception("Singular matrix in chol");
+    if (C(j,j) == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in chol");
 
     C(j,j) = std::sqrt(C(j,j));
 
@@ -1815,9 +1815,9 @@ Matrix<T> cholinv(const Matrix<T>& A) {
   auto Linv = eye<T>(N);
 
   for (unsigned j = 0; j < N; j++) {
-    if (L(j,j) == 0.0) throw singular_matrix_exception("Singular matrix in cholinv");
+    if (L(j,j) == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in cholinv");
 
-    L(j,j) = 1.0 / std::sqrt(L(j,j));
+    L(j,j) = static_cast<T>(1.0) / std::sqrt(L(j,j));
 
     for (unsigned k = j+1; k < N; k++)
       L(k,j) = L(k,j) * L(j,j);
@@ -1874,7 +1874,7 @@ LDL_result<T> ldl(const Matrix<T>& A) {
     for (unsigned k = 0; k < m; k++)
       d[m] -= L(m,k) * cconj(L(m,k)) * d[k];
 
-    if (d[m] == 0.0) throw singular_matrix_exception("Singular matrix in ldl");
+    if (d[m] == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in ldl");
 
     for (unsigned n = m+1; n < N; n++) {
       L(n,m) = A(n,m);
@@ -1923,7 +1923,7 @@ QR_result<T> qr_red_gs(const Matrix<T>& A) {
 
     R(c,c) = static_cast<T>(norm_fro(v));
     
-    if (R(c,c) == 0.0) throw singular_matrix_exception("Division by 0 in QR GS");
+    if (R(c,c) == static_cast<T>(0.0)) throw singular_matrix_exception("Division by 0 in QR GS");
     
     for (int k = 0; k < rows; k++)
       Q(k,c) = v(k) / R(c,c);
@@ -2213,7 +2213,7 @@ Matrix<T> solve_triu(const Matrix<T>& U, const Matrix<T>& B) {
       for (unsigned j = n + 1; j < N; j++)
         X(n,m) -= U(n,j) * X(j,m);
 
-      if (U(n,n) == 0.0) throw singular_matrix_exception("Singular matrix in solve_triu");
+      if (U(n,n) == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in solve_triu");
 
       X(n,m) /= U(n,n);
     }
@@ -2256,7 +2256,7 @@ Matrix<T> solve_tril(const Matrix<T>& L, const Matrix<T>& B) {
       for (unsigned j = 0; j < n; j++)
         X(n,m) -= L(n,j) * X(j,m);
       
-      if (L(n,n) == 0.0) throw singular_matrix_exception("Singular matrix in solve_tril");
+      if (L(n,n) == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in solve_tril");
       
       X(n,m) /= L(n,n);
     }
