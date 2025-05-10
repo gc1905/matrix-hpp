@@ -537,6 +537,50 @@ double norm_fro(const Matrix<T>& A) {
   return std::sqrt(sum);
 }
 
+/** \brief Matrix \f$p=1\f$ norm (column norm).
+ *  
+ *  Calculates \f$p=1\f$ norm \f$||A||_1\f$ of the input matrix. The \f$p=1\f$ norm is defined as the
+ *  maximum absolute sum of elements of each column.
+ */
+template<typename T>
+double norm_p1(const Matrix<T>& A) {
+  double max_sum = 0.0;
+
+  for (unsigned c = 0; c < A.cols(); c++) {
+    double sum = 0.0;
+
+    for (unsigned r = 0; r < A.rows(); r++)
+      sum += std::abs(A(r,c));
+
+    if (sum > max_sum)
+      max_sum = sum;
+  }
+
+  return max_sum;
+}
+
+/** \brief Matrix \f$p=\infty\f$ norm (row norm).
+ *  
+ *  Calculates \f$p=\infty\f$ norm \f$||A||_\infty\f$ of the input matrix. The \f$p=\infty\f$ norm is defined as
+ *  the maximum absolute sum of elements of each row.
+ */
+template<typename T>
+double norm_inf(const Matrix<T>& A) {
+  double max_sum = 0.0;
+
+  for (unsigned r = 0; r < A.rows(); r++) {
+    double sum = 0.0;
+
+    for (unsigned c = 0; c < A.cols(); c++)
+      sum += std::abs(A(r,c));
+
+    if (sum > max_sum)
+      max_sum = sum;
+  }
+
+  return max_sum;
+}
+
 /** \brief Extract triangular lower part.
  *  
  *  Return a new matrix formed by extracting the lower triangular part of the input matrix, and setting all other 

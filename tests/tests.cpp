@@ -276,6 +276,8 @@ class TC_Norms: public Testcase_Abstract {
                        1, 1,-4,-1}, 4, 4);
 
     assertDouble(norm_fro(A), 15.23154621172782, 1e-12, "Frobenius 4x4");
+    assertDouble(norm_p1 (A), 18, 1e-12, "P1 norm 4x4");
+    assertDouble(norm_inf(A), 20, 1e-12, "Inf norm 4x4");
     assertDouble(cond(A), 52.87099603962670, 1e-12, "Condition 4x4");
 
     Matrix<complex<double>> B({{4,+3},{-3,+8},{4,+5},{ 7,+4},
@@ -283,6 +285,8 @@ class TC_Norms: public Testcase_Abstract {
                                {1,+0},{ 8,+3},{8,-5},{-9,-6}}, 3, 4);
                      
     assertDouble(norm_fro(B), 27.83882181415011, 1e-12, "Frobenius 3x4 complex");
+    assertDouble(norm_p1 (B), 28.40171598961982, 1e-12, "P1 norm 3x4 complex");
+    assertDouble(norm_inf(B), 33.38477631085023, 1e-12, "Inf norm 3x4 complex");
     assertDouble(cond(B.get_submatrix(0,2,0,2)), 9.132131063632931, 1e-12, "Condition 3x3 complex");
   }
 };
