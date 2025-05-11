@@ -32,7 +32,7 @@ class Matrix_rng {
     }
 
     // real
-    template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+    template<typename T, typename std::enable_if<!Util::is_complex<T>::value,int>::type = 0>
     Matrix<T> gen_matrix(unsigned rows, unsigned cols) {
       Matrix<T> A(rows, cols);
       for (unsigned i = 0; i < A.numel(); i++)
@@ -41,7 +41,7 @@ class Matrix_rng {
     }
 
     // complex
-    template<typename T, typename std::enable_if<is_complex<T>::value,int>::type = 0>
+    template<typename T, typename std::enable_if<Util::is_complex<T>::value,int>::type = 0>
     Matrix<T> gen_matrix(unsigned rows, unsigned cols) {
       Matrix<T> A(rows, cols);
       for (unsigned i = 0; i < A.numel(); i++) {

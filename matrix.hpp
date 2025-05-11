@@ -39,58 +39,63 @@ namespace Mtx {
 
 template<typename T> class Matrix;
 
-template<class T> struct is_complex : std::false_type {};
-template<class T> struct is_complex<std::complex<T>> : std::true_type {};
-
-/** \brief Complex conjugate helper.
- *
- *  Helper function to allow for generalization of code for complex and real types. <br>
- *  For real numbers, this function returns the input argument unchanged. <br>
- *  For complex numbers, this function calls std::conj.
+/** Colelction of various helper functions that allow for generalization of code for complex and real 
+ *  datatypes.
  */
-template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
-inline T cconj(T x) {
-  return x;
-}
+namespace Util {
+  template<class T> struct is_complex : std::false_type {};
+  template<class T> struct is_complex<std::complex<T>> : std::true_type {};
 
-template<typename T, typename std::enable_if<is_complex<T>::value,int>::type = 0>
-inline T cconj(T x) {
-  return std::conj(x);
-}
+  /** \brief Complex conjugate helper.
+   *
+   *  Helper function to allow for generalization of code for complex and real types. <br>
+   *  For real numbers, this function returns the input argument unchanged. <br>
+   *  For complex numbers, this function calls std::conj.
+   */
+  template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+  inline T cconj(T x) {
+    return x;
+  }
 
-/** \brief Complex sign helper.
- *
- *  Helper function to allow for generalization of code for complex and real types. <br>
- *  For real numbers, this function returns sign bit, i.e., 1 when the value is non-negative and -1 otherwise. <br>
- *  For complex numbers, this function calculates \f$ e ^ {i \cdot arg(x)} \f$.
- */
-template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
-inline T csign(T x) {
-  return (x > static_cast<T>(0)) ? static_cast<T>(1) : static_cast<T>(-1);
-}
+  template<typename T, typename std::enable_if<is_complex<T>::value,int>::type = 0>
+  inline T cconj(T x) {
+    return std::conj(x);
+  }
 
-template<typename T, typename std::enable_if<is_complex<T>::value,int>::type = 0>
-inline T csign(T x) {
-  auto x_arg = std::arg(x);
-  T y(0, x_arg);
-  return std::exp(y);
-}
+  /** \brief Complex sign helper.
+   *
+   *  Helper function to allow for generalization of code for complex and real types. <br>
+   *  For real numbers, this function returns sign bit, i.e., 1 when the value is non-negative and -1 otherwise. <br>
+   *  For complex numbers, this function calculates \f$ e ^ {i \cdot arg(x)} \f$.
+   */
+  template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+  inline T csign(T x) {
+    return (x > static_cast<T>(0)) ? static_cast<T>(1) : static_cast<T>(-1);
+  }
 
-/** \brief Complex real part helper.
- *
- *  Helper function to allow for generalization of code for complex and real types. <br>
- *  For real numbers, this function returns the input argument unchanged. <br>
- *  For complex numbers, this function returns the real part.
- */
-template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
-inline T creal(std::complex<T> x) {
-  return std::real(x);
-}
+  template<typename T, typename std::enable_if<is_complex<T>::value,int>::type = 0>
+  inline T csign(T x) {
+    auto x_arg = std::arg(x);
+    T y(0, x_arg);
+    return std::exp(y);
+  }
 
-template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
-inline T creal(T x) {
-  return x;
-}
+  /** \brief Complex real part helper.
+   *
+   *  Helper function to allow for generalization of code for complex and real types. <br>
+   *  For real numbers, this function returns the input argument unchanged. <br>
+   *  For complex numbers, this function returns the real part.
+   */
+  template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+  inline T creal(std::complex<T> x) {
+    return std::real(x);
+  }
+
+  template<typename T, typename std::enable_if<!is_complex<T>::value,int>::type = 0>
+  inline T creal(T x) {
+    return x;
+  }
+} // namespace Util
 
 /** \brief Singular matrix exception.
  *
@@ -532,7 +537,7 @@ double norm_fro(const Matrix<T>& A) {
   double sum = 0;
 
   for (unsigned i = 0; i < A.numel(); i++)
-    sum += creal(A(i) * cconj(A(i)));
+    sum += Util::creal(A(i) * Util::cconj(A(i)));
 
   return std::sqrt(sum);
 }
@@ -806,8 +811,8 @@ Matrix<T> mult(const Matrix<T>& A, const Matrix<T>& B) {
   for (unsigned i = 0; i < rows_A; i++)
     for (unsigned j = 0; j < cols_B; j++)
       for (unsigned k = 0; k < cols_A; k++)
-      C(i,j) += (transpose_first  ? cconj(A(k,i)) : A(i,k)) *
-                (transpose_second ? cconj(B(j,k)) : B(k,j));
+      C(i,j) += (transpose_first  ? Util::cconj(A(k,i)) : A(i,k)) *
+                (transpose_second ? Util::cconj(B(j,k)) : B(k,j));
 
   return C;
 }
@@ -841,8 +846,8 @@ Matrix<T> mult_hadamard(const Matrix<T>& A, const Matrix<T>& B) {
 
   for (unsigned i = 0; i < rows_A; i++)
     for (unsigned j = 0; j < cols_A; j++)
-      C(i,j) += (transpose_first  ? cconj(A(j,i)) : A(i,j)) *
-                (transpose_second ? cconj(B(j,i)) : B(i,j));
+      C(i,j) += (transpose_first  ? Util::cconj(A(j,i)) : A(i,j)) *
+                (transpose_second ? Util::cconj(B(j,i)) : B(i,j));
 
   return C;
 }
@@ -876,8 +881,8 @@ Matrix<T> add(const Matrix<T>& A, const Matrix<T>& B) {
 
   for (unsigned i = 0; i < rows_A; i++)
     for (unsigned j = 0; j < cols_A; j++)
-      C(i,j) += (transpose_first  ? cconj(A(j,i)) : A(i,j)) +
-                (transpose_second ? cconj(B(j,i)) : B(i,j));
+      C(i,j) += (transpose_first  ? Util::cconj(A(j,i)) : A(i,j)) +
+                (transpose_second ? Util::cconj(B(j,i)) : B(i,j));
 
   return C;
 }
@@ -911,8 +916,8 @@ Matrix<T> subtract(const Matrix<T>& A, const Matrix<T>& B) {
 
   for (unsigned i = 0; i < rows_A; i++)
     for (unsigned j = 0; j < cols_A; j++)
-      C(i,j) += (transpose_first  ? cconj(A(j,i)) : A(i,j)) -
-                (transpose_second ? cconj(B(j,i)) : B(i,j));
+      C(i,j) += (transpose_first  ? Util::cconj(A(j,i)) : A(i,j)) -
+                (transpose_second ? Util::cconj(B(j,i)) : B(i,j));
 
   return C;
 }
@@ -943,7 +948,7 @@ std::vector<T> mult(const Matrix<T>& A, const std::vector<T>& v) {
   std::vector<T> u(rows_A, static_cast<T>(0));
   for (unsigned r = 0; r < rows_A; r++)
     for (unsigned c = 0; c < cols_A; c++)
-      u[r] += v[c] * (transpose_matrix ? cconj(A(c,r)) : A(r,c));
+      u[r] += v[c] * (transpose_matrix ? Util::cconj(A(c,r)) : A(r,c));
 
   return u;
 }
@@ -974,7 +979,7 @@ std::vector<T> mult(const std::vector<T>& v, const Matrix<T>& A) {
   std::vector<T> u(cols_A, static_cast<T>(0));
   for (unsigned c = 0; c < cols_A; c++)
     for (unsigned r = 0; r < rows_A; r++)
-      u[c] += v[r] * (transpose_matrix ? cconj(A(c,r)) : A(r,c));
+      u[c] += v[r] * (transpose_matrix ? Util::cconj(A(c,r)) : A(r,c));
   
   return u;
 }
@@ -1830,9 +1835,9 @@ Matrix<T> chol(const Matrix<T>& A) {
     for (unsigned k = j+1; k < N; k++)
       for (unsigned i = k; i < N; i++)
         if (is_upper)
-          C(k,i) -= C(j,i) * cconj(C(j,k));
+          C(k,i) -= C(j,i) * Util::cconj(C(j,k));
         else
-          C(i,k) -= C(i,j) * cconj(C(k,j));
+          C(i,k) -= C(i,j) * Util::cconj(C(k,j));
   }
 
   return C;
@@ -1867,7 +1872,7 @@ Matrix<T> cholinv(const Matrix<T>& A) {
 
     for (unsigned k = j+1; k < N; k++)
       for (unsigned i = k; i < N; i++)
-        L(i,k) = L(i,k) - L(i,j) * cconj(L(k,j));
+        L(i,k) = L(i,k) - L(i,j) * Util::cconj(L(k,j));
   }
 
   for (unsigned k = 0; k < N; k++) {
@@ -1915,14 +1920,14 @@ LDL_result<T> ldl(const Matrix<T>& A) {
     d[m] = A(m,m);
 
     for (unsigned k = 0; k < m; k++)
-      d[m] -= L(m,k) * cconj(L(m,k)) * d[k];
+      d[m] -= L(m,k) * Util::cconj(L(m,k)) * d[k];
 
     if (d[m] == static_cast<T>(0.0)) throw singular_matrix_exception("Singular matrix in ldl");
 
     for (unsigned n = m+1; n < N; n++) {
       L(n,m) = A(n,m);
       for (unsigned k = 0; k < m; k++)
-        L(n,m) -= L(n,k) * cconj(L(m,k)) * d[k];
+        L(n,m) -= L(n,k) * Util::cconj(L(m,k)) * d[k];
       L(n,m) /= d[m];
     }
   }
@@ -1959,7 +1964,7 @@ QR_result<T> qr_red_gs(const Matrix<T>& A) {
     Matrix<T> v = A.get_submatrix(0, rows-1, c, c);
     for (int r = 0; r < c; r++) {
       for (int k = 0; k < rows; k++)
-        R(r,c) = R(r,c) + cconj(Q(k,r)) * A(k,c);
+        R(r,c) = R(r,c) + Util::cconj(Q(k,r)) * A(k,c);
       for (int k = 0; k < rows; k++)
         v(k) = v(k) - R(r,c) * Q(k,r);
     }
@@ -1989,7 +1994,7 @@ Matrix<T> householder_reflection(const Matrix<T>& a) {
   static const T ISQRT2 = static_cast<T>(0.707106781186547);
 
   Matrix<T> v(a);
-  v(0) += csign(v(0)) * norm_fro(v);
+  v(0) += Util::csign(v(0)) * norm_fro(v);
   auto vn = norm_fro(v) * ISQRT2;
   for (unsigned i = 0; i < v.numel(); i++)
     v(i) /= vn;
@@ -3076,7 +3081,7 @@ inline Matrix<T> Matrix<T>::ctranspose() const {
   Matrix<T> res(ncols, nrows);
   for (unsigned c = 0; c < ncols; c++)
     for (unsigned r = 0; r < nrows; r++)
-      res(c,r) = cconj(at(r,c));
+      res(c,r) = Util::cconj(at(r,c));
   return res;
 }
 
