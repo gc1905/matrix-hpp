@@ -817,6 +817,51 @@ Matrix<T> mult(const Matrix<T>& A, const Matrix<T>& B) {
   return C;
 }
 
+/** \brief Matrix multiplication with addition.
+ *  
+ *  Performs matrix multiplication and addition according to the formula \f$A \cdot B + C\f$.
+ * 
+ *  This function supports template parameterization of input matrix transposition, providing better efficiency
+ *  than in case of using \ref Mtx::ctranspose() function due to zero-copy operation. In case of complex matrices, 
+ *  conjugate (Hermitian) transpose is used.
+ * 
+ *  \tparam transpose_A if set to true, matrix \f$A\f$ shall be transposed during operation
+ *  \tparam transpose_B if set to true, matrix \f$B\f$ shall be transposed during operation
+ *  \tparam transpose_C if set to true, matrix \f$C\f$ shall be transposed during operation
+ *  
+ *  \param A left-side factor matrix of size \a N x \a M (after transposition)
+ *  \param B right-side factor matrix of size \a M x \a K (after transposition)
+ *  \param C matrix to be added to the result of multiplication of size \a N x \a K (after transposition)
+ *  \return output matrix of size \a N x \a K
+ */
+template<typename T, bool transpose_A = false, bool transpose_B = false, bool transpose_C = false>
+Matrix<T> mult_and_add(const Matrix<T>& A, const Matrix<T>& B, const Matrix<T>& C) {
+  // Adjust dimensions based on transpositions
+  unsigned rows_A = transpose_A ? A.cols() : A.rows();
+  unsigned cols_A = transpose_A ? A.rows() : A.cols();
+  unsigned rows_B = transpose_B ? B.cols() : B.rows();
+  unsigned cols_B = transpose_B ? B.rows() : B.cols();
+  unsigned rows_C = transpose_C ? C.cols() : C.rows();
+  unsigned cols_C = transpose_C ? C.rows() : C.cols();
+
+  if ((cols_A != rows_B) || (rows_A != rows_C) || (cols_B != cols_C)) 
+    throw std::runtime_error("Unmatching matrix dimensions for mult_and_add");
+
+  Matrix<T> D(rows_C, cols_C);
+
+  for (unsigned i = 0; i < rows_A; i++) {
+    for (unsigned j = 0; j < cols_B; j++) {
+      D(i,j) = transpose_C ? Util::cconj(C(j,i)) : C(i,j);
+      for (unsigned k = 0; k < cols_A; k++) {
+        D(i,j) += (transpose_A ? Util::cconj(A(k,i)) : A(i,k)) *
+                  (transpose_B ? Util::cconj(B(j,k)) : B(k,j));
+      }
+    }
+  }
+
+  return D;
+}
+
 /** \brief Matrix Hadamard (element-wise) multiplication.
  *  
  *  Performs Hadamard (element-wise) multiplication of two matrices.

@@ -203,6 +203,13 @@ class TC_Arithmetic: public Testcase_Abstract {
                            1, 7, 
                            8, 2}, 3, 2);
 
+    auto A2x2 = Matrix<T>({1, 2, 
+                           3, 4}, 2, 2);
+
+    auto A3x3 = Matrix<T>({4, 2, 3, 
+                           3, 4, 1,
+                           2, 6, 5}, 3, 3);
+
     vector<T> v2 {3,5};
 
     assertEqual(add<T,false,false>(A2x3,A2x3), Matrix<T>({16, 8, 10, 4, 4, 6}, 2, 3), string("Addition ") + type_str<T>());
@@ -224,6 +231,11 @@ class TC_Arithmetic: public Testcase_Abstract {
     assertEqual(mult<T,true ,false>(A2x3,A2x3), Matrix<T>({68, 36, 46, 36, 20, 26, 46, 26, 34}, 3, 3), string("Multiplication T1 ") + type_str<T>());
     assertEqual(mult<T,false,true >(A2x3,A2x3), Matrix<T>({105, 39, 39, 17}, 2, 2), string("Multiplication T2 ") + type_str<T>());
     assertEqual(mult<T,true ,true >(A3x2,A2x3), Matrix<T>({84, 36, 46, 22}, 2, 2), string("Multiplication T12 ") + type_str<T>());
+
+    assertEqual(mult_and_add<T,false,false,true >(A2x3,A3x2,A2x2), Matrix<T>({85, 49, 38, 26}, 2, 2), string("Mult and add ") + type_str<T>());
+    assertEqual(mult_and_add<T,true ,false,false>(A2x3,A2x3,A3x3), Matrix<T>({72, 38, 49, 39, 24, 27, 48, 32, 39}, 3, 3), string("Mult and add T1 ") + type_str<T>());
+    assertEqual(mult_and_add<T,false,true ,false>(A2x3,A2x3,A2x2), Matrix<T>({106, 41, 42, 21}, 2, 2), string("Mult and add T2 ") + type_str<T>());
+    assertEqual(mult_and_add<T,true ,true ,true >(A3x2,A2x3,A2x2), Matrix<T>({85, 39, 48, 26}, 2, 2), string("Mult and add T12 ") + type_str<T>());
 
     assertEqual(mult<T,false>(v2,A2x3), vector<T> {34,22,30}, string("Multiplication vec-M ") + type_str<T>());
     assertEqual(mult<T,true >(v2,A3x2), vector<T> {20,38,34}, string("Multiplication vec-M^T ") + type_str<T>());
