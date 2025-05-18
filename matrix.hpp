@@ -1081,10 +1081,35 @@ Matrix<T> div(const Matrix<T>& A, T s) {
   return B;
 }
 
+/** \brief Converts matrix to std::string.
+ *  
+ *  This function converts a matrix into a string representation in row-major order. Each element of the matrix 
+ *  is converted to its string equivalent. Elements within the same row are separated by the \a col_separator character. 
+ *  Rows are separated by the \a row_separator character.
+ * 
+ *  \param A inpur matrix to be converted
+ *  \param col_separator character used to separate elements within the same row. The default character is the space
+ *  \param row_separator character used to separate rows. The default character is the new line '\\n'
+ *  \return std::string representation of the input matrix
+ */
+template<typename T>
+std::string to_string(const Matrix<T>& A, char col_separator = ' ', char row_separator = '\n') {
+  std::stringstream ss;
+  for (unsigned row = 0; row < A.rows(); row ++) {
+    for (unsigned col = 0; col < A.cols(); col ++)
+      ss << A(row,col) << col_separator;
+    if (row < static_cast<unsigned>(A.rows()-1)) ss << row_separator;
+  }
+  return ss.str();
+}
+
 /** \brief Matrix ostream operator.
  *  
- *  Formats a string incorporating the elements of a matrix. Elements within the same row are separated by space sign ' '. 
- *  Different rows are separated by the endline delimiters.
+ *  Formats a string incorporating elements of the matrix in row-major order. Elements within the same row are 
+ *  separated by the space character. Different lines (rows) are separated by the endline delimiter std::endl.
+ * 
+ *  This function does not allow to control the default delimiter characters. Refer to \ref Mtx::to_string()
+ *  if control of delimiter characters is needed.
  */
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& A) {
