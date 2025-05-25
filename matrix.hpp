@@ -3398,22 +3398,16 @@ template<typename T>
 void Matrix<T>::swap_rows(unsigned i, unsigned j) {
   if (!(i < rows() && j < rows())) throw std::out_of_range("Row index out of range");
 
-  for (unsigned k = 0; k < cols(); k++) {
-    T tmp = at(i,k);
-    at(i,k) = at(j,k);
-    at(j,k) = tmp;
-  }
+  for (unsigned k = 0; k < cols(); k++)
+    std::swap(at(i,k), at(j,k));
 }
 
 template<typename T>
 void Matrix<T>::swap_cols(unsigned i, unsigned j) {
   if (!(i < cols() && j < cols())) throw std::out_of_range("Column index out of range");
 
-  for (unsigned k = 0; k < rows(); k++) {
-    T tmp = at(k,i);
-    at(k,i) = at(k,j);
-    at(k,j) = tmp;
-  }
+  for (unsigned k = 0; k < rows(); k++)
+    std::swap(at(k,i), at(k,j));
 }
 
 template<typename T>
