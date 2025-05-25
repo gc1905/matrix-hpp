@@ -1675,7 +1675,7 @@ Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
     if (Util::creal(max_val) <= Util::creal(tol)) {
       // skip column c
       for (unsigned i = row; i < B.rows(); i++)
-        B(i,c) = 0.0;
+        B(i,c) = static_cast<T>(0);
     } else {
       // swap current row with the pivot row
       if (pivot_row != row)
@@ -1683,10 +1683,11 @@ Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
           std::swap(B(row,j), B(pivot_row,j));
 
       // normalize pivot row if not normalized
-      auto factor = B(row,c);
-      if (factor != static_cast<T>(1))
+      if (B(row,c) != static_cast<T>(1)) {
+        auto factor = static_cast<T>(1) / B(row,c);
         for (unsigned j = c; j < B.cols(); j++)
-          B(row,j) /= factor;
+          B(row,j) *= factor;
+      }
 
       // eliminate current column
       for (unsigned i = 0; i < B.rows(); i++) {
