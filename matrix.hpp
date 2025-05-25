@@ -725,13 +725,17 @@ inline Matrix<T> foreach_elem_copy(const Matrix<T>& A, std::function<T(T)> func)
  * 
  *  \throws std::runtime_error when permutation vector is empty
  *  \throws std::out_of_range when any index in permutation vector is out of range
+ *          Thrown only when MATRIX_STRICT_BOUNDS_CHECK is enabled during compilation.
+ *
  */
 template<typename T>
 Matrix<T> permute_rows(const Matrix<T>& A, const std::vector<unsigned> perm) {
   if (perm.empty()) throw std::runtime_error("Permutation vector is empty");
 
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   for (unsigned p = 0; p < perm.size(); p++)
     if (!(perm[p] < A.rows())) throw std::out_of_range("Index in permutation vector out of range");
+#endif
 
   Matrix<T> B(perm.size(), A.cols());
 
@@ -754,13 +758,16 @@ Matrix<T> permute_rows(const Matrix<T>& A, const std::vector<unsigned> perm) {
  * 
  *  \throws std::runtime_error when permutation vector is empty
  *  \throws std::out_of_range when any index in permutation vector is out of range
+ *          Thrown only when MATRIX_STRICT_BOUNDS_CHECK is enabled during compilation.
  */
 template<typename T>
 Matrix<T> permute_cols(const Matrix<T>& A, const std::vector<unsigned> perm) {
   if (perm.empty()) throw std::runtime_error("Permutation vector is empty");
 
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   for (unsigned p = 0; p < perm.size(); p++)
     if (!(perm[p] < A.cols())) throw std::out_of_range("Index in permutation vector out of range");
+#endif
 
   Matrix<T> B(A.rows(), perm.size());
 
@@ -785,18 +792,21 @@ Matrix<T> permute_cols(const Matrix<T>& A, const std::vector<unsigned> perm) {
  *  \return output matrix created by row and column permutation of \a A
  * 
  *  \throws std::runtime_error when any of permutation vectors is empty
- *  \throws std::out_of_range when any index in permutation vector is out of range
+ *  \throws std::out_of_range when any index in permutation vector is out of range.
+ *          Thrown only when MATRIX_STRICT_BOUNDS_CHECK is enabled during compilation.
  */
 template<typename T>
 Matrix<T> permute_rows_and_cols(const Matrix<T>& A, const std::vector<unsigned> perm_rows, const std::vector<unsigned> perm_cols) {
   if (perm_rows.empty()) throw std::runtime_error("Row permutation vector is empty");
   if (perm_cols.empty()) throw std::runtime_error("Column permutation vector is empty");
 
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   for (unsigned pc = 0; pc < perm_cols.size(); pc++)
     if (!(perm_cols[pc] < A.cols())) throw std::out_of_range("Column index in permutation vector out of range");
 
   for (unsigned pr = 0; pr < perm_rows.size(); pr++)
     if (!(perm_rows[pr] < A.rows())) throw std::out_of_range("Row index in permutation vector out of range");
+#endif
 
   Matrix<T> B(perm_rows.size(), perm_cols.size());
 
@@ -2901,6 +2911,7 @@ class Matrix {
      *  Access specific matrix element using singular index of the element. Follows column-major convention. 
      *
      *  \throws std::out_of_range when element index is out of range
+     *          Thrown only when MATRIX_STRICT_BOUNDS_CHECK is enabled during compilation.
      */
     T& operator()(unsigned nel);
     T  operator()(unsigned nel) const;
@@ -2911,7 +2922,8 @@ class Matrix {
      *  
      *  Access specific matrix element using row and column index of the element. 
      * 
-     *  \throws std::out_of_range when row or column index is out of range of matrix dimensions
+     *  \throws std::out_of_range when row or column index is out of range of matrix dimensions.
+     *          Thrown only when MATRIX_STRICT_BOUNDS_CHECK is enabled during compilation.
      */
     T& operator()(unsigned row, unsigned col);
     T  operator()(unsigned row, unsigned col) const;
@@ -3160,29 +3172,37 @@ inline T Matrix<T>::operator()(unsigned row, unsigned col) const {
 
 template<typename T>
 inline T & Matrix<T>::at(unsigned nel) {
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   if (!(nel < numel())) throw std::out_of_range("Element index out of range");
+#endif
 
   return data[nel];
 }
 
 template<typename T>
 inline T & Matrix<T>::at(unsigned row, unsigned col) {
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   if (!(row < rows() && col < cols())) throw std::out_of_range("Element index out of range");
+#endif
 
   return data[nrows * col + row];
 }
 
 template<typename T>
 inline T Matrix<T>::at(unsigned nel) const {
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   if (!(nel < numel())) throw std::out_of_range("Element index out of range");
+#endif
 
   return data[nel];
 }
 
 template<typename T>
 inline T Matrix<T>::at(unsigned row, unsigned col) const {
+#ifdef MATRIX_STRICT_BOUNDS_CHECK
   if (!(row < rows())) throw std::out_of_range("Row index out of range");
   if (!(col < cols())) throw std::out_of_range("Column index out of range");
+#endif
 
   return data[nrows * col + row];
 }

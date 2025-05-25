@@ -4,6 +4,9 @@ CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -I.
 
+# Uncomment to disable index bounds checking on every element access (recommended only for debugging)
+CFLAGS += -DMATRIX_STRICT_BOUNDS_CHECK
+
 .PHONY: examples tests docs
 
 tests:

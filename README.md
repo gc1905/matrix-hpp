@@ -53,6 +53,12 @@ void main() {
 
 For more examples, refer to [examples/examples.cpp](examples/examples.cpp) file. Remark that not all features of the library are used in the provided examples.
 
+## Debugging
+
+The `MATRIX_STRICT_BOUNDS_CHECK` preprocessor macro controls whether runtime bounds checking is performed for element access operations, e.g., using `operator()`, within the `Matrix` class. When enabled, out-of-bounds access attempts will throw a `std::out_of_range` exception. Please refer to documentation of a specific function for information if it is affected by the `MATRIX_STRICT_BOUNDS_CHECK` preprocessor macro or not.
+
+Disabling bounds checking improves performance but removes protection against errors. It should be disabled only for optimized release builds where peak performance is required.
+
 ## Tests
 
 Unit tests are compiled with `make tests`. 
