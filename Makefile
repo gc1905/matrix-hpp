@@ -7,7 +7,7 @@ CFLAGS += -I.
 .PHONY: examples tests docs
 
 tests:
-	$(CC) $(CFLAGS) -o tests.exe tests/tests.cpp
+	$(CC) $(CFLAGS) -I./tests -o tests.exe tests/tests.cpp
 
 examples:
 	$(CC) $(CFLAGS) -o examples.exe examples/examples.cpp
