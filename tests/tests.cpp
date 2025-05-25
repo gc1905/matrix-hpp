@@ -168,6 +168,44 @@ class TC_Determinant: public Testcase_Abstract {
   }
 };
 
+class TC_GaussianElimination: public Testcase_Abstract {
+  protected:
+    virtual const char* name() {
+      return "Gaussian Elimination";
+    }
+
+  virtual void test() {
+    test_real();
+    test_complex();
+  }
+
+  void test_real() {
+    using T = double;
+
+    Matrix<T> A({-1.086101836444808e+00,-1.328246563520227e+00,-1.930993300035351e+00, 8.518324470965049e-01,-1.010883212834746e+00,
+                  7.394317878961396e-02,-3.777882857949398e-01, 1.160506644354348e+00,-1.124291491684013e+00,-1.153600398144733e+00,
+                  5.106918236050780e-01,-2.688370577240415e-01, 3.128153994879118e-01, 3.873902888248552e-01, 2.933118676530351e-01}, 3, 5);
+
+    Matrix<T> rref_A({1,0,0, 1.356834261890864, 1.491144893200166,
+                      0,1,0,-0.147082511083213, 0.763629589673415,
+                      0,0,1,-1.103126971361427,-0.840469188749445}, 3, 5);
+
+    assertEqualTol(rref(A, static_cast<T>(1e-10)), rref_A, static_cast<T>(1e-12), string("rref 3x5 ") + type_str<T>());
+  }
+
+  void test_complex() {
+    using T = complex<double>;
+
+    Matrix<T> A({{ 0.846408450821707, 1.438304863976267},{-0.023657531642538,-1.367370940386192},{ 0.627181548626273,-0.677436235270766},
+                 { 0.150448493121689,-1.179069725893190},{-2.129731742310570,-0.859888357754163},{-1.678328913297391,-1.081731839147772}}, 2, 3);
+
+    Matrix<T> rref_A({{1,0},{0,0},{ 0.326136400415648,-0.227291684708920},
+                      {0,0},{1,0},{ 0.697275109303627, 0.029778324443622}}, 2, 3);
+
+    assertEqualTol(rref(A, static_cast<T>(1e-10)), rref_A, static_cast<T>(1e-12), string("rref 2x3 ") + type_str<T>());
+  }
+};
+
 class TC_Elementwise: public Testcase_Abstract {
   protected:
     virtual const char* name() {
@@ -709,6 +747,7 @@ int main() {
   TC_Norms().run();
   TC_Elementwise().run();
   TC_Determinant().run();
+  TC_GaussianElimination().run();
   TC_Permutations().run();
   TC_Concatenation().run();
   TC_CholeskyDecomposition().run();

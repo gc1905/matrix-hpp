@@ -1638,6 +1638,72 @@ LUP_result<T> lup(const Matrix<T>& A) {
   return res;
 }
 
+/** \brief Reduced row echelon form
+ *
+ *  Computes the reduced row echelon form of a matrix using the Gauss-Jordan elimination method
+ *  by applying a sequence of elementary row operations.
+ *
+ *  More information: https://en.wikipedia.org/wiki/Row_echelon_form
+ *
+ *  \param A input matrix to be reduced
+ *  \param tol numerical precision tolerance to determine zero element, defaults to 0
+ *  \return reduced row echelon form of matrix \a A
+ */
+template<typename T>
+Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
+  unsigned row = 0;
+
+  Matrix<T> B(A);
+
+  for (unsigned c = 0; c < B.cols(); c++) {
+    // stop if already found pivots for all rows
+    if (row >= B.rows())
+      break;
+
+    // find the pivot row
+    T max_val = static_cast<T>(0);
+    unsigned pivot_row = row;
+
+    for (unsigned i = row; i < B.rows(); i++) {
+      T x = static_cast<T>(std::abs(B(i,c)));
+      if (Util::creal(x) > Util::creal(max_val)) {
+        max_val = x;
+        pivot_row = i;
+      }
+    }
+
+    if (Util::creal(max_val) <= Util::creal(tol)) {
+      // skip column c
+      for (unsigned i = row; i < B.rows(); i++)
+        B(i,c) = 0.0;
+    } else {
+      // swap current row with the pivot row
+      if (pivot_row != row)
+        for (unsigned j = c; j < B.cols(); j++)
+          std::swap(B(row,j), B(pivot_row,j));
+
+      // normalize pivot row if not normalized
+      auto factor = B(row,c);
+      if (factor != static_cast<T>(1))
+        for (unsigned j = c; j < B.cols(); j++)
+          B(row,j) /= factor;
+
+      // eliminate current column
+      for (unsigned i = 0; i < B.rows(); i++) {
+        if (i != row) {
+          auto factor = B(i,c);
+          for (unsigned j = c; j < B.cols(); j++)
+            B(i,j) -= factor * B(row,j);
+        }
+      }
+
+      row++;
+    }
+  }
+
+  return B;
+}
+
 /** \brief Matrix inverse using Gauss-Jordan elimination.
  *  
  *  Calculates an inverse of a square matrix recursively using Gauss-Jordan elimination. If the inverse doesn't exists, 
