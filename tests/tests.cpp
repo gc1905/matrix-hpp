@@ -177,6 +177,7 @@ class TC_GaussianElimination: public Testcase_Abstract {
   virtual void test() {
     test_real();
     test_complex();
+    test_pivot();
   }
 
   void test_real() {
@@ -203,6 +204,25 @@ class TC_GaussianElimination: public Testcase_Abstract {
                       {0,0},{1,0},{ 0.697275109303627, 0.029778324443622}}, 2, 3);
 
     assertEqualTol(rref(A, static_cast<T>(1e-10)), rref_A, static_cast<T>(1e-12), string("rref 2x3 ") + type_str<T>());
+  }
+
+  void test_pivot() {
+    using T = double;
+
+    Matrix<T> A({16, 2, 3,13,
+                  5,11,10, 8,
+                  9, 7, 6,12,
+                  4,14,15, 1}, 4, 4);
+
+    Matrix<T> rref_A({1, 0, 0, 1,
+                      0, 1, 0, 3,
+                      0, 0, 1,-3,
+                      0, 0, 0, 0}, 4, 4);
+
+    auto AP = rrefp(A, static_cast<T>(1e-10));
+
+    assertEqualTol(AP.A, rref_A, static_cast<T>(1e-12), string("rrefp A 4x4 ") + type_str<T>());
+    assertEqual(AP.P, vector<unsigned>{0,1,2}, string("rrefp P 4x4 ") + type_str<T>());
   }
 };
 

@@ -148,6 +148,22 @@ struct LUP_result {
   std::vector<unsigned> P;
 };
 
+/** \brief Matrix with pivoting.
+ *
+ *  This structure encapsulates a \ref Mtx::Matrix object together with related pivot vector. The pivot vector
+ *  can represent row or column permutations depending on a specific function that returns this structure.
+ */
+template<typename T>
+struct Matrix_with_pivot {
+  /**\brief Matrix
+   */
+  Matrix<T> A;
+
+  /**\brief Pivot vector with permutation indices
+   */
+  std::vector<unsigned> P;
+};
+
 /** \brief Result of QR decomposition.
  *
  *  This structure stores the result of QR decomposition, returned by, e.g., from \ref Mtx::qr() function.
@@ -1648,22 +1664,32 @@ LUP_result<T> lup(const Matrix<T>& A) {
   return res;
 }
 
-/** \brief Reduced row echelon form
+/** \brief Reduced row echelon form (with pivot)
  *
  *  Computes the reduced row echelon form of a matrix using the Gauss-Jordan elimination method
- *  by applying a sequence of elementary row operations.
+ *  by applying a sequence of elementary row operations. Additionally, returns a vector of non-zero
+ *  pivot columns on which elimination has been performed. If pivot vector is not required, use
+ *  \ref Mtx::rref() function instead.
  *
  *  More information: https://en.wikipedia.org/wiki/Row_echelon_form
  *
  *  \param A input matrix to be reduced
  *  \param tol numerical precision tolerance to determine zero element, defaults to 0
- *  \return reduced row echelon form of matrix \a A
+ *  \return structure encapsulating reduced row echelon form of the input matrix and a vector of
+ *          the nonzero pivot column indices.
  */
 template<typename T>
-Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
-  unsigned row = 0;
+Matrix_with_pivot<T> rrefp(const Matrix<T>& A, T tol = 0) {
+  Matrix_with_pivot<T> BP;
 
-  Matrix<T> B(A);
+  // aliases
+  auto& B = BP.A;
+  auto& P = BP.P;
+
+  B = Matrix<T>(A);
+  P.reserve(B.cols());
+
+  unsigned row = 0;
 
   for (unsigned c = 0; c < B.cols(); c++) {
     // stop if already found pivots for all rows
@@ -1687,6 +1713,8 @@ Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
       for (unsigned i = row; i < B.rows(); i++)
         B(i,c) = static_cast<T>(0);
     } else {
+      P.push_back(c);
+
       // swap current row with the pivot row
       if (pivot_row != row)
         for (unsigned j = c; j < B.cols(); j++)
@@ -1712,7 +1740,27 @@ Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
     }
   }
 
-  return B;
+  return BP;
+}
+
+/** \brief Reduced row echelon form
+ *
+ *  Computes the reduced row echelon form of a matrix using the Gauss-Jordan elimination method
+ *  by applying a sequence of elementary row operations.
+ *
+ *  If a vector of non-zero columns on which elimination has been performed is required, consider
+ *  using \ref Mtx::rrefp().
+ *
+ *  More information: https://en.wikipedia.org/wiki/Row_echelon_form
+ *
+ *  \param A input matrix to be reduced
+ *  \param tol numerical precision tolerance to determine zero element, defaults to 0
+ *  \return reduced row echelon form of the input matrix.
+ */
+template<typename T>
+Matrix<T> rref(const Matrix<T>& A, T tol = 0) {
+  auto BP = rrefp(A, tol);
+  return BP.A;
 }
 
 /** \brief Matrix inverse using Gauss-Jordan elimination.
