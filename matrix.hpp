@@ -3511,7 +3511,7 @@ inline void Matrix<T>::col_from_vector(const std::vector<T>& vec, unsigned col) 
 
 template<typename T>
 inline void Matrix<T>::row_from_vector(const std::vector<T>& vec, unsigned row) {
-  if (vec.size() != rows()) throw std::runtime_error("Vector size is not equal to number of columns");
+  if (vec.size() != cols()) throw std::runtime_error("Vector size is not equal to number of columns");
   if (row >= rows()) throw std::out_of_range("Row index out of range");
 
   for (unsigned i = 0; i < cols(); i++)
